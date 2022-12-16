@@ -14,8 +14,6 @@ export interface Product {
 }
 
 
-
-
 const products: Product[] = [
   {
     id: 1,
