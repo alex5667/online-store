@@ -18,7 +18,14 @@
         </header>
         <main>
             <div class="main__container">
-                <div class="main__filtres"></div>
+                <div class="main__filters">
+                    <div class="filters-checkbox">
+                        <div class="filter category-filter">
+                            <span class="filter__title">Category</span>
+                            <div class="filter__items"></div>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="main__content"></div>
 
@@ -34,6 +41,18 @@
 
 
     </div>
+
+    <template id="filter-checkbox">
+        <label for="" class="filter-checkbox">
+            <input type="checkbox" id="" class="filter-checkbox__input" />
+            <span class="filter-checkbox__text-label"></span>
+        </label>
+    </template>
+
+
+
+
+
     <template id="categories-list">
         <ul class="categories"></ul>
     </template>

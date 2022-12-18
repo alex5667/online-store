@@ -75,3 +75,38 @@ body {
 
   // main=======================================================================================================
 
+.main{
+  &__container{
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+
+  }
+  &__filters{
+    display: flex;
+    width: 20%;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-between;
+
+  }
+  &__content{
+    display: flex;
+    width: 80%;
+    
+  }
+}
+.filters-checkbox{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.filter{
+  display: flex;
+  flex-direction: column;
+  &__items{
+    display: flex;
+    flex-direction: column;
+  }
+}

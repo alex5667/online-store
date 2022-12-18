@@ -9,7 +9,7 @@ export default class CategoryList{
 
   constructor(){
     this.categories = categories;
-    this.sectionElement = document.querySelector('.main__filtres') as HTMLElement;
+    this.sectionElement = document.querySelector('.main__filters') as HTMLElement;
     this.templateItem = document.getElementById('categories-list') as HTMLTemplateElement;
     const clonedNode = document.importNode(this.templateItem.content, true);
     this.element = clonedNode.firstElementChild as HTMLElement;

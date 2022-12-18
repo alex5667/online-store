@@ -1,16 +1,16 @@
 import ProductsList from '../ProductsList/ProductsList';
-import CategoryList from '../CategoriesList/CategoriesList'
+import Filters from '../Filters/Filters'
 export default class App {
   productsList: ProductsList;
-  categoryList: CategoryList;
+  filters:Filters;
   constructor() {
     this.productsList = new ProductsList();
-    this.categoryList = new CategoryList();
+    this.filters= new Filters();
   }
   start() {
 
     this.productsList.render();
-    this.categoryList.render();
+    this.filters.render();
   }
 
 }
