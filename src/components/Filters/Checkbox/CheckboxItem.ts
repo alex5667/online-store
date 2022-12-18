@@ -18,10 +18,10 @@ export default class CheckboxItem {
       this.render();
    }
    render(): void {
-      const labelEl: HTMLLabelElement = this.element;
+      const label: HTMLLabelElement = this.element;
       const checkbox = this.element.querySelector('.filter-checkbox__input') as HTMLInputElement;
       const textLabel = this.element.querySelector('.filter-checkbox__text-label') as HTMLSpanElement;
-      labelEl.htmlFor = this.checkboxId;
+      label.htmlFor = this.checkboxId;
       checkbox.id = this.checkboxId;
       textLabel.innerText = [this.category[0].toUpperCase(), this.category.slice(1)].join('');
       if (this.checked) {
