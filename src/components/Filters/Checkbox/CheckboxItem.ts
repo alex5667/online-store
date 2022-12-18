@@ -18,14 +18,14 @@ export default class CheckboxItem {
       this.render();
    }
    render(): void {
-      const label: HTMLLabelElement = this.element;
-      const checkbox = this.element.querySelector('.filter-checkbox__input') as HTMLInputElement;
+      const labelElement: HTMLLabelElement = this.element;
+      const checkboxInput = this.element.querySelector('.filter-checkbox__input') as HTMLInputElement;
       const textLabel = this.element.querySelector('.filter-checkbox__text-label') as HTMLSpanElement;
-      label.htmlFor = this.checkboxId;
-      checkbox.id = this.checkboxId;
+      labelElement.htmlFor = this.checkboxId;
+      checkboxInput.id = this.checkboxId;
       textLabel.innerText = [this.category[0].toUpperCase(), this.category.slice(1)].join('');
       if (this.checked) {
-         checkbox.checked = true;
+         checkboxInput.checked = true;
       }
    }
 
