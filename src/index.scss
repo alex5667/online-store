@@ -1,6 +1,8 @@
 @use "sass:math";
 
 @import "./scss/base/mixins.scss";
+@import "./components/ProductsList/ProductsList.scss";
+
 @import "./components/ProductItem/ProductItem.scss";
 
 
