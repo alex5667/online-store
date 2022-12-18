@@ -18,31 +18,10 @@
         </header>
         <main>
             <div class="main__container">
-                <div id="product-item">
-                    <div class="product">
-                        <div class="product__img">
-                            <img src="https://i.dummyjson.com/data/products/1/thumbnail.jpg" alt="Product" />
-                        </div>
-                        <div class="product__main">
-                            <h3 class="product__title">iPhone 9</h3>
-                            <div class="product__description">
-                                <p class="product__category">Category:</p>
-                                <p class="product__brand">Brand:</p>
-                                <p class="product__stock">Stock:</p>
-                                <p class="product__rating">Rating:</p>
-                                <p class="product__discount">Discount Percentage:</p>
-                                <p class="product__price">Price: </p>
-                            </div>
-                            <div class="product__footer">
-                                <button type="button" class="link-button link-button-add-to-cart">
-                                    Add to cart
-                                </button>
-                                <button type="button" class="link-button link-button-details">Details</button>
-    
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <div class="main__filtres"></div>
+
+                <div class="main__content"></div>
+
 
             </div>
 
@@ -55,8 +34,36 @@
 
 
     </div>
+    <template id="products-list">
+        <section class="products"></section>
+    </template>
+    <template id="product-item">
+        <div class="product">
+            <div class="product__img">
+                <img src="" alt="Product" />
+            </div>
+            <div class="product__main">
+                <h3 class="product__title"></h3>
+                <div class="product__description">
+                    <p class="product__category"></p>
+                    <p class="product__brand"></p>
+                    <p class="product__stock"></p>
+                    <p class="product__rating"></p>
+                    <p class="product__discount"></p>
+                    <p class="product__price"></p>
+                </div>
+                <div class="product__footer">
+                    <button type="button" class="link-button link-button-add-to-cart">
+                        Add to cart
+                    </button>
+                    <button type="button" class="link-button link-button-details">Details</button>
 
-    <script src="./index.ts"></script>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- <script src="./index.ts"></script> -->
 
 </body>
 
