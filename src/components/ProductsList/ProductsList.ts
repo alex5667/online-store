@@ -1,12 +1,12 @@
-import { Product } from '../models/product';
+import { ProductModel } from '../models/product';
 import Products from '../../db/products';
 import ProductItem from '../ProductItem/ProductItem'
 
 import './ProductsList';
 
 
-export default class ProductList {
-  products: Product[];
+export default class ProductsList {
+  products: ProductModel[];
   templateItem: HTMLTemplateElement;
   sectionElement: HTMLElement;
   element: HTMLElement;

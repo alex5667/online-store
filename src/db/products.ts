@@ -1,8 +1,8 @@
 
-import { Product } from "../components/models/product";
+import { ProductModel } from "../components/models/product";
 
 
-const products: Product[] = [
+const products: ProductModel[] = [
   {
     id: 1,
     title: "iPhone 9",
@@ -1845,3 +1845,10 @@ const products: Product[] = [
 ];
 export default products;
 
+export const categories: string[] = products.reduce((acc: string[], cur: ProductModel): string[] => {
+  if (!acc.includes(cur.category)) {
+    acc.push(cur.category)
+  };
+  return acc;
+}, []);
+console.log(categories)

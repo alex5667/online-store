@@ -1,15 +1,15 @@
-import  {Product}  from '../models/product';
+import  {ProductModel}  from '../models/product';
 
 
 
 export default class ProductItem{
-  product: Product;
+  product: ProductModel;
   templateItem: HTMLTemplateElement;
   sectionElement:HTMLElement;
   element:HTMLElement;
   constructor(
     ElementSelector: string,
-    product: Product,
+    product: ProductModel,
   ){
     this.product = product;
     this.sectionElement = document.querySelector(ElementSelector) as HTMLElement;
