@@ -37,7 +37,7 @@ export default class ProductItem{
     // const addToCartBtn = this.element.querySelector('.link-button link-button-add-to-cart') as HTMLButtonElement;
     // const details = this.element.querySelector('.link-link-button-details') as HTMLButtonElement;
 
-    const {thumbnail,title,category,brand,stock,rating,discountPercentage,price}:Product=this.product;
+    const {thumbnail,title,category,brand,stock,rating,discountPercentage,price}:ProductModel=this.product;
     image.src = thumbnail;
     titleEl.innerText =`${title}`;
     categoryEL.innerText =`Release:${category}`;

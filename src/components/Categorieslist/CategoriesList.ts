@@ -1,4 +1,5 @@
 import CategoryItem from '../CategoryItem/CategoryItem';
+import{categories} from '../../db/productsProperties'
 
 export default class CategoryList{
   categories: string[];
@@ -6,8 +7,7 @@ export default class CategoryList{
   sectionElement: HTMLElement;
   templateItem: HTMLTemplateElement;
 
-
-  constructor(categories: string[]){
+  constructor(){
     this.categories = categories;
     this.sectionElement = document.querySelector('.main__filtres') as HTMLElement;
     this.templateItem = document.getElementById('categories-list') as HTMLTemplateElement;
