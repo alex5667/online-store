@@ -21,8 +21,10 @@ export default class ProductsList {
     const clonedNode = document.importNode(this.templateItem.content, true);
     this.element = clonedNode.firstElementChild as HTMLElement;
     this.sectionElement.insertAdjacentElement('afterbegin', this.element);
-
+    const filterState: string | null = localStorage.getItem('Filter');
+    this.categoryFilter(filterState? JSON.parse(filterState) : STATE_FILTER);
   }
+
   render(): void {
     this.element.innerHTML = '';
     if (this.products.length > 0) {
@@ -33,16 +35,19 @@ export default class ProductsList {
   categoryFilter(filterState: Filter): void {
     localStorage.setItem('Filter', JSON.stringify(filterState));
     const { category }: Filter = filterState;
+    console.log(filterState)
+
     if (category.length > 0) {
       this.products = this.products.filter((product) => {
         if (!category.includes(product.category)) return false;
         return true;
-
       }
       )
     }
+    this.render();
   }
 
+  
 
 
 }

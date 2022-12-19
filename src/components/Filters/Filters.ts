@@ -14,10 +14,10 @@ export default class Filters {
 
   }
   render(): void {
-    this.chekboxFilters();
+    this.checkboxFilters();
 
   }
-  chekboxFilters(): void {
+  checkboxFilters(): void {
     this.categories.forEach((category) => new CheckboxItem(
       '.category-filter .filter__items',
       category,

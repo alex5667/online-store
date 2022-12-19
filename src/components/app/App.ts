@@ -1,15 +1,13 @@
 import ProductsList from '../ProductsList/ProductsList';
 import Filters from '../Filters/Filters'
 export default class App {
-  productsList: ProductsList;
-  filters:Filters;
+  productsList: ProductsList= new ProductsList();
+  filters:Filters= new Filters(this.productsList);
   constructor() {
-    this.productsList = new ProductsList();
-    this.filters= new Filters();
+    this.filters
   }
   start() {
 
-    this.productsList.render();
     this.filters.render();
   }
 
