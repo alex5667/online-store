@@ -19,7 +19,15 @@ export default class Filters {
       category,
       'category-filter',
       false,
-    ))
+    ).element.addEventListener('change', this.setCategoryFilter.bind(this)))
+  }
+
+  setCategoryFilter(e: Event):void{
+    const checkboxLabel = e.currentTarget as HTMLLabelElement;
+
+    console.log(checkboxLabel.lastChild) 
+
+
   }
 
 }
