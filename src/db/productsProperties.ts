@@ -8,4 +8,3 @@ export const categories: string[] = products.reduce((acc: string[], cur: Product
   }
   return acc;
 }, []);
-console.log(categories)

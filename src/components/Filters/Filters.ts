@@ -1,17 +1,16 @@
 import CheckboxItem from '../Filters/Checkbox/CheckboxItem';
 import { categories } from '../../db/productsProperties';
 import ProductsList from '../ProductsList/ProductsList';
+import {STATE_FILTER,Filter} from '../models/filter'
 export default class Filters {
-  categories: string[];
+  categories: string[]= categories;
+  state:Filter;
   constructor() {
-    this.categories = categories;
-
+    this.state =STATE_FILTER;
     this.render();
   }
   render(): void {
-
     this.chekboxFilters();
-
 
   }
   chekboxFilters(): void {
@@ -20,7 +19,15 @@ export default class Filters {
       category,
       'category-filter',
       false,
-    ))
+    ).element.addEventListener('change', this.setCategoryFilter.bind(this)))
+  }
+
+  setCategoryFilter(e: Event):void{
+    const checkboxLabel = e.currentTarget as HTMLLabelElement;
+
+    console.log(checkboxLabel.lastChild) 
+
+
   }
 
 }
