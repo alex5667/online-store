@@ -1,6 +1,8 @@
 import { ProductModel } from '../models/product';
 import Products from '../../db/products';
 import ProductItem from '../ProductItem/ProductItem'
+import { STATE_FILTER, Filter } from '../models/filter';
+
 
 import './ProductsList';
 
@@ -27,4 +29,20 @@ export default class ProductsList {
       this.products.forEach((product) => new ProductItem('.products', product));
     }
   }
+
+  categoryFilter(filterState: Filter): void {
+    localStorage.setItem('Filter', JSON.stringify(filterState));
+    const { category }: Filter = filterState;
+    if (category.length > 0) {
+      this.products = this.products.filter((product) => {
+        if (!category.includes(product.category)) return false;
+        return true;
+
+      }
+      )
+    }
+  }
+
+
+
 }
