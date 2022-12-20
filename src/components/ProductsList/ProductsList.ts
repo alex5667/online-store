@@ -15,12 +15,13 @@ export default class ProductsList {
 
 
   constructor() {
+    this.products = Products;
+
     this.sectionElement = document.querySelector('.main__content') as HTMLElement;
     this.templateItem = document.getElementById('products-list') as HTMLTemplateElement;
     const clonedNode = document.importNode(this.templateItem.content, true);
     this.element = clonedNode.firstElementChild as HTMLElement;
     this.sectionElement.insertAdjacentElement('afterbegin', this.element);
-    this.products = Products;
     const filterState: string | null = localStorage.getItem('Filter');
     this.usefilter(filterState ? JSON.parse(filterState) : STATE_FILTER);
 
@@ -29,36 +30,35 @@ export default class ProductsList {
   }
 
   render(): void {
+
     this.element.innerHTML = '';
     if (this.products.length > 0) {
       this.products.forEach((product) => new ProductItem('.products', product));
     }
+
   }
 
   usefilter(filterState: Filter) {
-    console.log(filterState)
-
     this.categoryFilter(filterState);
-    console.log(this.products)
-
     this.render();
 
   }
 
   categoryFilter(filterState: Filter): void {
-    console.log(filterState)
 
     localStorage.setItem('Filter', JSON.stringify(filterState));
     const { category }: Filter = filterState;
     if (category.length > 0) {
-      this.products = this.products.filter((product) => {
+      this.products = Products.filter((product) => {
         if (!category.includes(product.category)) return false;
         return true;
       }
       )
-      console.log(this.products)
 
+    }else{
+      this.products = Products;
     }
+
   }
 
 
