@@ -23,7 +23,7 @@ export default class CheckboxItem {
       const textLabel = this.element.querySelector('.filter-checkbox__text-label') as HTMLSpanElement;
       labelElement.htmlFor = this.checkboxId;
       checkboxInput.id = this.checkboxId;
-      textLabel.innerText = [this.category[0].toUpperCase(), this.category.slice(1)].join('');
+      textLabel.innerText = this.category;
       if (this.checked) {
          checkboxInput.checked = true;
       }

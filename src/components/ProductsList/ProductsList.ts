@@ -45,10 +45,12 @@ export default class ProductsList {
   }
 
   categoryFilter(filterState: Filter): void {
+    console.log(filterState)
 
     localStorage.setItem('Filter', JSON.stringify(filterState));
     const { category, brand }: Filter = filterState;
     console.log(brand)
+    console.log(this.products)
 
     if (category.length > 0||brand.length > 0) {
       this.products = Products.filter((product) => {

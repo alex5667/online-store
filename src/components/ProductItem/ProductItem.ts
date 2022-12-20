@@ -40,12 +40,12 @@ export default class ProductItem{
     const {thumbnail,title,category,brand,stock,rating,discountPercentage,price}:ProductModel=this.product;
     image.src = thumbnail;
     titleEl.innerText =`${title}`;
-    categoryEL.innerText =`Release:${category}`;
-    brandEl.innerText =`Brand:${brand}`;
-    stockEL.innerText =`Stock:${stock}`;
-    ratingEl.innerText =`Rating:${rating}`;
-    discountEL.innerText =`Discount:${discountPercentage}`;
-    priceEl.innerText =`Discount:${price}`;
+    categoryEL.innerText =`Release: ${category}`;
+    brandEl.innerText =`Brand: ${brand}`;
+    stockEL.innerText =`Stock: ${stock}`;
+    ratingEl.innerText =`Rating: ${rating}`;
+    discountEL.innerText =`Discount: ${discountPercentage}`;
+    priceEl.innerText =`Price: ${price}`;
   }
 
 

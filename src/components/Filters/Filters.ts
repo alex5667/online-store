@@ -40,7 +40,7 @@ export default class Filters {
     const checkboxLabel = e.currentTarget as HTMLLabelElement;
     const checkbox = e.target as HTMLInputElement;
     const checkboxSpan = checkboxLabel?.querySelector('.filter-checkbox__text-label') as HTMLSpanElement;
-    const category = checkboxSpan.innerText.trim().toLowerCase();
+    const category = checkboxSpan.innerText.trim();
     if (checkbox.checked) {
       this.state.category.push(category);
     } else {
@@ -52,7 +52,8 @@ export default class Filters {
     const checkboxLabel = e.currentTarget as HTMLLabelElement;
     const checkbox = e.target as HTMLInputElement;
     const checkboxSpan = checkboxLabel?.querySelector('.filter-checkbox__text-label') as HTMLSpanElement;
-    const brand = checkboxSpan.innerText.trim().toLowerCase();
+    const brand = checkboxSpan.innerText.trim();
+
     if (checkbox.checked) {
       this.state.brand.push(brand);
     } else {
