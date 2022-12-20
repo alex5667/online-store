@@ -23,7 +23,7 @@ export default class ProductsList {
     this.element = clonedNode.firstElementChild as HTMLElement;
     this.sectionElement.insertAdjacentElement('afterbegin', this.element);
     const filterState: string | null = localStorage.getItem('Filter');
-    this.usefilter(filterState ? JSON.parse(filterState) : STATE_FILTER);
+    this.useFilter(filterState ? JSON.parse(filterState) : STATE_FILTER);
 
 
 
@@ -38,7 +38,7 @@ export default class ProductsList {
 
   }
 
-  usefilter(filterState: Filter) {
+  useFilter(filterState: Filter) {
     this.categoryFilter(filterState);
     this.render();
 
@@ -47,18 +47,20 @@ export default class ProductsList {
   categoryFilter(filterState: Filter): void {
 
     localStorage.setItem('Filter', JSON.stringify(filterState));
-    const { category }: Filter = filterState;
-    if (category.length > 0) {
+    const { category, brand }: Filter = filterState;
+    console.log(brand)
+
+    if (category.length > 0||brand.length > 0) {
       this.products = Products.filter((product) => {
-        if (!category.includes(product.category)) return false;
+        if (category.length > 0 && !category.includes(product.category)) return false;
+        if (brand.length > 0 && !brand.includes(product.brand)) return false;
+
         return true;
       }
       )
-
-    }else{
+    } else {
       this.products = Products;
     }
-
   }
 
 
