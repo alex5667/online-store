@@ -40,7 +40,7 @@ export default class ProductItem{
     const {thumbnail,title,category,brand,stock,rating,discountPercentage,price}:ProductModel=this.product;
     image.src = thumbnail;
     titleEl.innerText =`${title}`;
-    categoryEL.innerText =`Release: ${category}`;
+    categoryEL.innerText =`Category: ${category}`;
     brandEl.innerText =`Brand: ${brand}`;
     stockEL.innerText =`Stock: ${stock}`;
     ratingEl.innerText =`Rating: ${rating}`;

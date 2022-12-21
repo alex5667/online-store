@@ -52,13 +52,14 @@ export default class ProductsList {
       this.products = Products.filter((product) => {
         if (category.length > 0 && !category.includes(product.category)) return false;
         if (brand.length > 0 && !brand.includes(product.brand)) return false;
-
         return true;
       }
       )
     } else {
       this.products = Products;
     }
+    console.log(this.products.length)
+
   }
 
 

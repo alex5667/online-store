@@ -57,8 +57,9 @@ export default class Filters {
       this.state.category = this.state.category.filter((el) => el !== category);
     }
     this.productsList.useFilter(this.state);
-    console.log(this.state.category)
 
+    console.log(Products.filter((product) => product.category === category).length)
+    console.log(this.state.category)
   }
   setBrandFilter(e: Event): void {
     const checkboxLabel = e.currentTarget as HTMLLabelElement;
