@@ -1,11 +1,12 @@
 import CheckboxItem from '../Filters/Checkbox/CheckboxItem';
-import { categories,brands } from '../../db/productsProperties';
+import { categories, brands } from '../../db/productsProperties';
 import ProductsList from '../ProductsList/ProductsList';
 import { STATE_FILTER, Filter } from '../models/filter';
+import Products from '../../db/products'
 
 export default class Filters {
   categories: string[] = categories;
-  brands:string[] = brands;
+  brands: string[] = brands;
   state: Filter;
   productsList: ProductsList;
   constructor(productsList: ProductsList) {
@@ -21,20 +22,29 @@ export default class Filters {
 
   }
   checkboxFilters(): void {
-    this.categories.forEach((category) => new CheckboxItem(
-      '.category-filter .filter__items',
-      category,
-      'category-filter',
-      false,
-    ).element.addEventListener('change', this.setCategoryFilter.bind(this)))
+    this.categories.forEach((category) => {
+      const amount = Products.filter((product) => product.category === category).length;
+      new CheckboxItem(
+        '.category-filter .filter__items',
+        category,
+        'category-filter',
+        amount,
+      ).element.addEventListener('change', this.setCategoryFilter.bind(this))
+    }
+    )
 
-    this.brands.forEach((brand) => new CheckboxItem(
-      '.brand-filter .filter__items',
-      brand,
-      'brand-filter',
-      false,
-    ).element.addEventListener('change', this.setBrandFilter.bind(this)));
+    this.brands.forEach((brand) => {
+      const amount = Products.filter((product) => product.brand === brand).length;
+      new CheckboxItem(
+        '.brand-filter .filter__items',
+        brand,
+        'brand-filter',
+        amount,
+      ).element.addEventListener('change', this.setBrandFilter.bind(this))
+    });
   }
+
+
 
   setCategoryFilter(e: Event): void {
     const checkboxLabel = e.currentTarget as HTMLLabelElement;
@@ -47,6 +57,8 @@ export default class Filters {
       this.state.category = this.state.category.filter((el) => el !== category);
     }
     this.productsList.useFilter(this.state);
+    console.log(this.state.category)
+
   }
   setBrandFilter(e: Event): void {
     const checkboxLabel = e.currentTarget as HTMLLabelElement;
@@ -59,9 +71,8 @@ export default class Filters {
     } else {
       this.state.brand = this.state.brand.filter((el) => el !== brand);
     }
-    console.log(this.state)
     this.productsList.useFilter(this.state);
   }
-  
-  
+
+
 }
