@@ -22,6 +22,7 @@ export default class Filters {
   checkboxFilters(categories: string[]): void {
     categories.forEach((category) => {
       const amount = Products.filter((product) => product.category === category).length;
+
       new CheckboxItem(
         '.category-filter .filter__items',
         category,
@@ -51,13 +52,27 @@ export default class Filters {
     const checkbox = e.target as HTMLInputElement;
     const checkboxSpan = checkboxLabel?.querySelector('.filter-checkbox__text-label') as HTMLSpanElement;
     const category = checkboxSpan.innerText.trim();
+
     if (checkbox.checked) {
       this.state.category.push(category);
     } else {
       this.state.category = this.state.category.filter((el) => el !== category);
     }
     this.productsList.useFilter(this.state);
+    // const amountfilter= this.state.category.map((cat)=> Products.filter((product)=> product.category===cat).length);
+    this.setCheckboxAmount(this.state);
   }
+
+  setCheckboxAmount(state: Filter) {
+    // for(const prop in state){
+
+    //   console.log(state[prop])
+    // }
+    console.log(Object.values(state).map((label) => label.map((el: string) => Products.filter((product) => product.category === el || product.brand === el))).length)
+
+  }
+
+
 
   setBrandFilter(e: Event): void {
     const checkboxLabel = e.currentTarget as HTMLLabelElement;
@@ -71,6 +86,8 @@ export default class Filters {
       this.state.brand = this.state.brand.filter((el) => el !== brand);
     }
     this.productsList.useFilter(this.state);
+    const amountfilter = this.state.brand.map((bran) => Products.filter((product) => product.brand === bran).length);
+    console.log(amountfilter)
   }
 
 

@@ -2,7 +2,7 @@ import { ProductModel } from '../models/product';
 import Products from '../../db/products';
 import ProductItem from '../ProductItem/ProductItem'
 import { STATE_FILTER, Filter } from '../models/filter';
-import Filters from '../Filters/Filters';
+// import Filters from '../Filters/Filters';
 
 
 import './ProductsList';
@@ -45,26 +45,15 @@ export default class ProductsList {
   }
 
   checkboxFilter(filterState: Filter): void {
-
     localStorage.setItem('Filter', JSON.stringify(filterState));
     const { category, brand }: Filter = filterState;
     if (category.length > 0||brand.length > 0) {
-
       this.products = Products.filter((product) => {
         if (category.length > 0 && !category.includes(product.category)) return false;
         if (brand.length > 0 && !brand.includes(product.brand)) return false;
         return true;
-      }
-
-      )
-      
-    } else {
+      })} else {
       this.products = Products;
     }
   }
-
-
-
-
-
 }
