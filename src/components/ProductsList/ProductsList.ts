@@ -2,6 +2,7 @@ import { ProductModel } from '../models/product';
 import Products from '../../db/products';
 import ProductItem from '../ProductItem/ProductItem'
 import { STATE_FILTER, Filter } from '../models/filter';
+import Filters from '../Filters/Filters';
 
 
 import './ProductsList';
@@ -16,7 +17,6 @@ export default class ProductsList {
 
   constructor() {
     this.products = Products;
-
     this.sectionElement = document.querySelector('.main__content') as HTMLElement;
     this.templateItem = document.getElementById('products-list') as HTMLTemplateElement;
     const clonedNode = document.importNode(this.templateItem.content, true);
@@ -39,28 +39,30 @@ export default class ProductsList {
   }
 
   useFilter(filterState: Filter) {
-    this.categoryFilter(filterState);
+    this.checkboxFilter(filterState);
     this.render();
 
   }
 
-  categoryFilter(filterState: Filter): void {
+  checkboxFilter(filterState: Filter): void {
 
     localStorage.setItem('Filter', JSON.stringify(filterState));
     const { category, brand }: Filter = filterState;
     if (category.length > 0||brand.length > 0) {
+
       this.products = Products.filter((product) => {
         if (category.length > 0 && !category.includes(product.category)) return false;
         if (brand.length > 0 && !brand.includes(product.brand)) return false;
         return true;
       }
+
       )
+      
     } else {
       this.products = Products;
     }
-    console.log(this.products.length)
-
   }
+
 
 
 

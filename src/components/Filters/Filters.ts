@@ -11,24 +11,23 @@ export default class Filters {
   productsList: ProductsList;
   constructor(productsList: ProductsList) {
     const filter: string | null = localStorage.getItem('Filter');
-
     this.state = filter ? JSON.parse(filter) : STATE_FILTER;
     this.productsList = productsList;
     this.render();
-
   }
   render(): void {
-    this.checkboxFilters();
+    this.checkboxFilters(this.categories);
 
   }
-  checkboxFilters(): void {
-    this.categories.forEach((category) => {
+  checkboxFilters(categories: string[]): void {
+    categories.forEach((category) => {
       const amount = Products.filter((product) => product.category === category).length;
       new CheckboxItem(
         '.category-filter .filter__items',
         category,
         'category-filter',
         amount,
+        amount
       ).element.addEventListener('change', this.setCategoryFilter.bind(this))
     }
     )
@@ -40,6 +39,7 @@ export default class Filters {
         brand,
         'brand-filter',
         amount,
+        amount
       ).element.addEventListener('change', this.setBrandFilter.bind(this))
     });
   }
@@ -57,10 +57,8 @@ export default class Filters {
       this.state.category = this.state.category.filter((el) => el !== category);
     }
     this.productsList.useFilter(this.state);
-
-    console.log(Products.filter((product) => product.category === category).length)
-    console.log(this.state.category)
   }
+
   setBrandFilter(e: Event): void {
     const checkboxLabel = e.currentTarget as HTMLLabelElement;
     const checkbox = e.target as HTMLInputElement;
