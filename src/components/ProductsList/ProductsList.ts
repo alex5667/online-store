@@ -25,8 +25,6 @@ export default class ProductsList {
     const filterState: string | null = localStorage.getItem('Filter');
     this.useFilter(filterState ? JSON.parse(filterState) : STATE_FILTER);
 
-
-
   }
 
   render(): void {
@@ -54,6 +52,7 @@ export default class ProductsList {
         return true;
       })} else {
       this.products = Products;
+
     }
   }
 }
