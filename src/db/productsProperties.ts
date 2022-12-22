@@ -7,8 +7,8 @@ export const categories: string[] = products.reduce((acc: string[], cur: Product
     acc.push(cur.category);
   }
   return acc;
-}, []);
+}, []).sort((a, b) => b.localeCompare(a));
 export const brands: string[] = products.reduce((a: string[], c: ProductModel): string[] => {
   if (!a.includes(c.brand)) a.push(c.brand);
   return a;
-}, []).sort((a, b) => a.localeCompare(b));
+}, []).sort((a, b) => b.localeCompare(a));

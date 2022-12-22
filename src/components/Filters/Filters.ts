@@ -83,7 +83,7 @@ export default class Filters {
       this.state.category = this.state.category.filter((el) => el !== category);
     }
     this.productsList.useFilter(this.state);
-    this.setCheckboxAmount(this.state);
+    this.getProductsForCheckbox(this.state);
     this.setAmountInCheckbox();
   }
 
@@ -100,7 +100,7 @@ export default class Filters {
       this.state.brand = this.state.brand.filter((el) => el !== brand);
     }
     this.productsList.useFilter(this.state);
-    this.setCheckboxAmount(this.state);
+    this.getProductsForCheckbox(this.state);
     this.setAmountInCheckbox();
   }
 
@@ -110,15 +110,22 @@ export default class Filters {
       if(categories.includes(box.id)){
         const amount = this.productsForCheckbox.filter((product) => product.category === box.id).length;
         box.innerText = `${amount}`;
+        if(amount===0){
+          console.log(box.closest('label'))
+          box.classList.toggle('lock-input');
+        }
       }
       if(brands.includes(box.id)){
         const amount = this.productsForCheckbox.filter((product) => product.brand === box.id).length;
         box.innerText = `${amount}`;
+        if(amount===0){
+          box.classList.toggle('lock-input');
+        }
       }
     })
   }
 
-  setCheckboxAmount(state: Filter) {
+  getProductsForCheckbox(state: Filter) {
     const { category, brand }: Filter = state;
     if (category.length > 0 || brand.length > 0) {
       this.productsForCheckbox = Products.filter((product) => {
