@@ -16,7 +16,6 @@ export default class CheckboxItem {
       this.templateItem = document.getElementById('filter-checkbox') as HTMLTemplateElement;
       const clonedNode = document.importNode(this.templateItem.content, true);
       this.element = clonedNode.firstElementChild as HTMLLabelElement;
-      // this.sectionElement.innerHTML='';
       this.sectionElement.insertAdjacentElement('afterbegin', this.element);
       this.render();
    }
@@ -33,7 +32,6 @@ export default class CheckboxItem {
       textAmountInCheckbox.id=this.category;
       textAmountInCheckbox.innerText=String(this.amountfilter);
       textAmountInProperty.innerText=String(this.amount);
-
    }
 
 

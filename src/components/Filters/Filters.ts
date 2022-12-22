@@ -26,21 +26,21 @@ export default class Filters {
   checkboxFilters(categories: string[]): void {
     categories.forEach((category) => {
       const amount = Products.filter((product) => product.category === category).length;
-
+      
       let amountfilter=amount;
-      if(this.state.category.includes(category)){
-        amountfilter = +this.state.category
-        .map((cat) => this.productsForCheckbox
-        .filter((product) => product.category === cat)
-        .length);
-        console.log(category)
-        console.log(this.state.category)
-        console.log(amountfilter)
-      }else{
-        amountfilter=amount;
+      if(this.state.category.length>0){
+        this.state.category.forEach((el)=>{
+          if (el===category){
+            amountfilter=this.productsForCheckbox.filter((product) => product.category === el).length;
+            console.log(amountfilter)
+          } else{
+            amountfilter=0;
+            console.log(amountfilter)
+
+          }
+        })
       }
 
-      // amountfilter=this.state.category.length?amountfilter:amount;
             new CheckboxItem(
         '.category-filter .filter__items',
         category,
@@ -53,18 +53,9 @@ export default class Filters {
 
     this.brands.forEach((brand) => {
       const amount = Products.filter((product) => product.brand === brand).length;
-      let amountfilter=amount;
-      if(this.state.brand.includes(brand)){
-        amountfilter = +this.state.brand.map((bran) => this.productsForCheckbox
-        .filter((product) => product.brand === bran)
-        .length);
-
-        console.log(brand)
-        console.log(this.state.brand)
-        console.log(amountfilter)
-      }else{
-        amountfilter=amount;
-      }
+      const amountfilter=+this.state.brand.map((bran) => this.productsForCheckbox
+      .filter((product) => product.brand === bran)
+      .length);
 
       new CheckboxItem(
         '.brand-filter .filter__items',
@@ -75,7 +66,7 @@ export default class Filters {
       ).element.addEventListener('change', this.setBrandFilter.bind(this))
     });
   }
-
+  
 
 
   setCategoryFilter(e: Event): void {
@@ -83,13 +74,13 @@ export default class Filters {
     const checkbox = e.target as HTMLInputElement;
     const checkboxSpan = checkboxLabel?.querySelector('.filter-checkbox__text-label') as HTMLSpanElement;
     const category = checkboxSpan.innerText.trim();
-
     if (checkbox.checked) {
       this.state.category.push(category);
     } else {
       this.state.category = this.state.category.filter((el) => el !== category);
     }
     this.productsList.useFilter(this.state);
+    this.removeChildsCheckbox();
     this.setCheckboxAmount(this.state);
     this.checkboxFilters(categories)
   }
@@ -102,6 +93,13 @@ export default class Filters {
         if (brand.length > 0 && !brand.includes(product.brand)) return false;
         return true;
       })}
+}
+removeChildsCheckbox():void{
+  const filterItems=document.querySelectorAll('.filter__items') as NodeList;
+  filterItems.forEach(el => {
+    while (el.firstChild) {
+    el.removeChild(el.firstChild);} 
+  });
 }
 
 
@@ -119,10 +117,8 @@ export default class Filters {
     }
     this.productsList.useFilter(this.state);
     this.setCheckboxAmount(this.state);
+    this.removeChildsCheckbox();
     this.checkboxFilters(categories);
-
-
-
   }
 
 
