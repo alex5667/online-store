@@ -1,5 +1,5 @@
 import CheckboxItem from '../Filters/Checkbox/CheckboxItem';
-import { categories, brands } from '../../db/productsProperties';
+import { categories, brands,quantities } from '../../db/productsProperties';
 import ProductsList from '../ProductsList/ProductsList';
 import { STATE_FILTER, Filter } from '../models/filter';
 import Products from '../../db/products';
@@ -8,6 +8,7 @@ import { ProductModel } from '../models/product'
 export default class Filters {
   categories: string[] = categories;
   brands: string[] = brands;
+  quantities: number[] = quantities;
   state: Filter;
   productsList: ProductsList;
   productsForCheckbox: ProductModel[];

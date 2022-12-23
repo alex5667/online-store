@@ -12,3 +12,8 @@ export const brands: string[] = products.reduce((a: string[], c: ProductModel): 
   if (!a.includes(c.brand)) a.push(c.brand);
   return a;
 }, []).sort((a, b) => b.localeCompare(a));
+
+export const quantities: number[] = products.reduce((a: number[], c: ProductModel): number[] => {
+  if (!a.includes(c.stock)) a.push(c.stock);
+  return a;
+}, []).sort((a, b) => +a - +b);
