@@ -107,19 +107,24 @@ export default class Filters {
   setAmountInCheckbox(): void {
     const amountCheckboxes = document.querySelectorAll('.filter-checkbox__text-amount-in-checkbox') as NodeListOf<HTMLSpanElement>;
     amountCheckboxes.forEach((box) => {
+        const labelBox=box.closest('label') as HTMLLabelElement;
+        labelBox.classList.remove('lock-input');
+        console.log(this.productsForCheckbox)
+
       if(categories.includes(box.id)){
         const amount = this.productsForCheckbox.filter((product) => product.category === box.id).length;
         box.innerText = `${amount}`;
         if(amount===0){
-          console.log(box.closest('label'))
-          box.classList.toggle('lock-input');
+          const labelBox=box.closest('label') as HTMLLabelElement;
+          labelBox.classList.add('lock-input');
         }
       }
       if(brands.includes(box.id)){
         const amount = this.productsForCheckbox.filter((product) => product.brand === box.id).length;
         box.innerText = `${amount}`;
         if(amount===0){
-          box.classList.toggle('lock-input');
+          const labelBox=box.closest('label') as HTMLLabelElement;
+          labelBox.classList.add('lock-input');
         }
       }
     })
@@ -133,6 +138,8 @@ export default class Filters {
         if (brand.length > 0 && !brand.includes(product.brand)) return false;
         return true;
       })
+    }else{
+      this.productsForCheckbox=Products;
     }
   }
 }

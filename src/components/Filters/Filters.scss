@@ -1,3 +1,12 @@
+.filter-checkbox{
+
+  &.lock-input{
+    pointer-events: none;
+    background: red;
+
+  }
+}
+
 .filter{
   &__items{
     height: rem(200);
