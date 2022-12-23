@@ -17,3 +17,8 @@ export const prices: number[] = products.reduce((a: number[], c: ProductModel): 
   if (!a.includes(c.price)) a.push(c.price);
   return a;
 }, []).sort((a, b) => +a - +b);
+
+export const quantities: number[] = products.reduce((a: number[], c: ProductModel): number[] => {
+  if (!a.includes(c.stock)) a.push(c.stock);
+  return a;
+}, []).sort((a, b) => +a - +b);

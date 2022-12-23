@@ -3,7 +3,7 @@ import * as noUiSlider from 'nouislider';
 import _ from 'lodash';
 import { ProductModel } from '../models/product';
 import { STATE_FILTER, Filter } from '../../utils/filter';
-import { categories, brands, prices } from '../../db/productsProperties';
+import { categories, brands, prices, quantities } from '../../db/productsProperties';
 
 import CheckboxItem from '../Filters/Checkbox/CheckboxItem';
 import ProductsList from '../ProductsList/ProductsList';
@@ -15,6 +15,7 @@ export default class Filters {
   categories: string[] = categories;
   brands: string[] = brands;
   prices: number[] = prices;
+  quantities: number[] = quantities;
   state: Filter;
   productsList: ProductsList;
   productsForFilter: ProductModel[];
@@ -62,7 +63,7 @@ export default class Filters {
       this.state.price = [];
     } else {
       this.state.category = this.state.category.filter((el) => el !== category);
-      this.state.price=[];
+      this.state.price = [];
     }
     this.productsList.useFilter(this.state);
     this.getProductsForFilter(this.state);
@@ -158,7 +159,8 @@ export default class Filters {
     const connectElPrice = priceSlider.querySelector('.noUi-connect') as HTMLDivElement;
     if (this.state.price.length === 2) {
       priceSlider.noUiSlider?.set([...this.state.price]);
-    } else {
+    }
+    else {
       connectElPrice.classList.add('noUi-connect--unused');
     }
     priceSlider.noUiSlider?.on('update', (values, handle) => {
