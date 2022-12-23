@@ -52,10 +52,8 @@ export default class Filters {
         this.state.brand.forEach((el) => {
           if (el === brand) {
             amountfilter = this.productsForCheckbox.filter((product) => product.brand === el).length;
-            console.log(amountfilter)
           } else {
             amountfilter = 0;
-            console.log(amountfilter)
           }
         })
       }
@@ -109,7 +107,6 @@ export default class Filters {
     amountCheckboxes.forEach((box) => {
         const labelBox=box.closest('label') as HTMLLabelElement;
         labelBox.classList.remove('lock-input');
-        console.log(this.productsForCheckbox)
 
       if(categories.includes(box.id)){
         const amount = this.productsForCheckbox.filter((product) => product.category === box.id).length;
