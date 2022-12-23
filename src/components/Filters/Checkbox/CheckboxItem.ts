@@ -1,16 +1,14 @@
 
 export default class CheckboxItem {
    checkboxId: string;
-   amountfilter: number;
    amount: number;
    category: string;
    templateItem: HTMLTemplateElement;
    sectionElement: HTMLElement;
    element: HTMLLabelElement;
-   constructor(ElementSelector: string, category: string, filterType: string,amountfilter:number, amount: number) {
+   constructor(ElementSelector: string, category: string, filterType: string, amount: number) {
       this.category = category;
       this.checkboxId = `${filterType}-${category}`;
-      this.amountfilter = amountfilter;
       this.amount = amount;
       this.sectionElement = document.querySelector(ElementSelector) as HTMLElement;
       this.templateItem = document.getElementById('filter-checkbox') as HTMLTemplateElement;
@@ -30,7 +28,7 @@ export default class CheckboxItem {
       checkboxInput.id = this.checkboxId;
       textLabel.innerText = this.category;
       textAmountInCheckbox.id=this.category;
-      textAmountInCheckbox.innerText=String(this.amountfilter);
+      textAmountInCheckbox.innerText=String(this.amount);
       textAmountInProperty.innerText=String(this.amount);
    }
 

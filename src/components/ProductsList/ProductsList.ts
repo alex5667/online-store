@@ -39,9 +39,7 @@ export default class ProductsList {
   useFilter(filterState: Filter) {
     this.checkboxFilter(filterState);
     this.rangeFilter(filterState);
-
     this.render();
-
   }
 
   checkboxFilter(filterState: Filter): void {
@@ -60,10 +58,9 @@ export default class ProductsList {
   }
 
   rangeFilter(filterState: Filter): void {
-    const { price}: {
+    const { price }: {
       price: [number, number] | []
     } = filterState;
-
     if (price.length === 2) {
       this.products = this.products.filter((product) => (
         product.price >= price[0] && product.price <= price[1]

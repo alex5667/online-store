@@ -18,15 +18,13 @@ export default class Filters {
   priceSlider: noUiSlider.target;
   state: Filter;
   productsList: ProductsList;
-  productsForCheckbox: ProductModel[];
+  productsForFilter: ProductModel[];
   constructor(productsList: ProductsList) {
     const filter: string | null = localStorage.getItem('Filter');
     this.state = filter ? JSON.parse(filter) : STATE_FILTER;
-    console.log(STATE_FILTER)
     this.priceSlider = document.getElementById('price-filter__slider') as noUiSlider.target;
-
     this.productsList = productsList;
-    this.productsForCheckbox = Products;
+    this.productsForFilter = Products;
     this.render();
   }
   render(): void {
@@ -37,21 +35,10 @@ export default class Filters {
   checkboxFilters(): void {
     categories.forEach((category) => {
       const amount = Products.filter((product) => product.category === category).length;
-      let amountfilter = amount;
-      if (this.state.category.length > 0) {
-        this.state.category.forEach((el) => {
-          if (el === category) {
-            amountfilter = this.productsForCheckbox.filter((product) => product.category === el).length;
-          } else {
-            amountfilter = 0;
-          }
-        })
-      }
       new CheckboxItem(
         '.category-filter .filter__items',
         category,
         'category-filter',
-        amountfilter,
         amount
       ).element.addEventListener('change', this.setCategoryFilter.bind(this))
     }
@@ -59,28 +46,14 @@ export default class Filters {
 
     this.brands.forEach((brand) => {
       const amount = Products.filter((product) => product.brand === brand).length;
-      let amountfilter = amount;
-      if (this.state.brand.length > 0) {
-        this.state.brand.forEach((el) => {
-          if (el === brand) {
-            amountfilter = this.productsForCheckbox.filter((product) => product.brand === el).length;
-          } else {
-            amountfilter = 0;
-          }
-        })
-      }
-
       new CheckboxItem(
         '.brand-filter .filter__items',
         brand,
         'brand-filter',
-        amountfilter,
         amount
       ).element.addEventListener('change', this.setBrandFilter.bind(this))
     });
   }
-
-
 
   setCategoryFilter(e: Event): void {
     const checkboxLabel = e.currentTarget as HTMLLabelElement;
@@ -93,11 +66,9 @@ export default class Filters {
       this.state.category = this.state.category.filter((el) => el !== category);
     }
     this.productsList.useFilter(this.state);
-    this.getProductsForCheckbox(this.state);
+    this.getProductsForFilter(this.state);
     this.setAmountInCheckbox();
   }
-
-
 
   setBrandFilter(e: Event): void {
     const checkboxLabel = e.currentTarget as HTMLLabelElement;
@@ -110,7 +81,7 @@ export default class Filters {
       this.state.brand = this.state.brand.filter((el) => el !== brand);
     }
     this.productsList.useFilter(this.state);
-    this.getProductsForCheckbox(this.state);
+    this.getProductsForFilter(this.state);
     this.setAmountInCheckbox();
   }
 
@@ -119,9 +90,8 @@ export default class Filters {
     amountCheckboxes.forEach((box) => {
       const labelBox = box.closest('label') as HTMLLabelElement;
       labelBox.classList.remove('lock-input');
-
       if (categories.includes(box.id)) {
-        const amount = this.productsForCheckbox.filter((product) => product.category === box.id).length;
+        const amount = this.productsForFilter.filter((product) => product.category === box.id).length;
         box.innerText = `${amount}`;
         if (amount === 0) {
           const labelBox = box.closest('label') as HTMLLabelElement;
@@ -129,7 +99,7 @@ export default class Filters {
         }
       }
       if (brands.includes(box.id)) {
-        const amount = this.productsForCheckbox.filter((product) => product.brand === box.id).length;
+        const amount = this.productsForFilter.filter((product) => product.brand === box.id).length;
         box.innerText = `${amount}`;
         if (amount === 0) {
           const labelBox = box.closest('label') as HTMLLabelElement;
@@ -139,18 +109,19 @@ export default class Filters {
     })
   }
 
-  getProductsForCheckbox(state: Filter) {
+  getProductsForFilter(state: Filter) {
     const { category, brand }: Filter = state;
     if (category.length > 0 || brand.length > 0) {
-      this.productsForCheckbox = Products.filter((product) => {
+      this.productsForFilter = Products.filter((product) => {
         if (category.length > 0 && !category.includes(product.category)) return false;
         if (brand.length > 0 && !brand.includes(product.brand)) return false;
         return true;
       })
     } else {
-      this.productsForCheckbox = Products;
+      this.productsForFilter = Products;
     }
   }
+
   destroyExistingSlider(){
     if(this.priceSlider && this.priceSlider.noUiSlider){
       this.priceSlider.noUiSlider.destroy();
@@ -206,7 +177,6 @@ export default class Filters {
   setPriceFilter(start: number, end: number, values: [number, number]): void {
     const roundedMin: number = Math.floor(values[0]);
     const roundedMax: number = Math.floor(values[1]);
-
     if (roundedMin > start || roundedMax < end) {
       this.state.price = [roundedMin, roundedMax];
     } else {
