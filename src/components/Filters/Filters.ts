@@ -131,8 +131,10 @@ export default class Filters {
   rangeFilters(): void {
     const priceMin: number = this.prices[0];
     const priceMax: number = this.prices[this.prices.length - 1];
-    const priceDefault: [number, number] = [priceMin, priceMax];
-    const priceValues: [HTMLSpanElement, HTMLSpanElement] = [
+    const priceDefaultMin=this.state.price[0]?this.state.price[0]:priceMin;
+    const priceDefaultMax=this.state.price[1]?this.state.price[1]:priceMax;
+    const priceDefault: [number, number] = [priceDefaultMin, priceDefaultMax];
+    const priceInputs: [HTMLSpanElement, HTMLSpanElement] = [
       document.getElementById('price-filter__value-min') as HTMLSpanElement,
       document.getElementById('price-filter__value-max') as HTMLSpanElement,
     ];
@@ -151,7 +153,7 @@ export default class Filters {
       connectElPrice.classList.add('noUi-connect--unused');
     }
     this.priceSlider.noUiSlider?.on('update', (values, handle) => {
-      const element = priceValues[handle] as HTMLSpanElement;
+      const element = priceInputs[handle] as HTMLSpanElement;
       element.innerHTML = Math.floor(+values[handle]).toString();
 
       const modifiedValues: [number, number] = [Math.floor(+values[0]), Math.floor(+values[1])];
