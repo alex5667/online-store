@@ -15,17 +15,14 @@ export default class Filters {
   categories: string[] = categories;
   brands: string[] = brands;
   prices: number[] = prices;
-  // priceSlider: noUiSlider.target;
   state: Filter;
   productsList: ProductsList;
   productsForFilter: ProductModel[];
   constructor(productsList: ProductsList) {
     const filter: string | null = localStorage.getItem('Filter');
     this.state = filter ? JSON.parse(filter) : STATE_FILTER;
-    // this.priceSlider = document.getElementById('price-filter__slider') as noUiSlider.target;
     this.productsList = productsList;
     this.productsForFilter = Products;
-    this.render();
   }
   render(): void {
     this.checkboxFilters();
@@ -62,13 +59,16 @@ export default class Filters {
     const category = checkboxSpan.innerText.trim();
     if (checkbox.checked) {
       this.state.category.push(category);
+      this.state.price = [];
     } else {
       this.state.category = this.state.category.filter((el) => el !== category);
+      this.state.price=[];
     }
     this.productsList.useFilter(this.state);
     this.getProductsForFilter(this.state);
     this.setAmountInCheckbox();
     this.rangeFilters();
+
   }
 
   setBrandFilter(e: Event): void {
@@ -78,8 +78,11 @@ export default class Filters {
     const brand = checkboxSpan.innerText.trim();
     if (checkbox.checked) {
       this.state.brand.push(brand);
+      this.state.price = [];
     } else {
       this.state.brand = this.state.brand.filter((el) => el !== brand);
+      this.state.price = [];
+
     }
     this.productsList.useFilter(this.state);
     this.getProductsForFilter(this.state);
@@ -129,11 +132,7 @@ export default class Filters {
     this.setStatePrice();
   }
 
-  // destroyExistingSlider() {
-  //   if (this.priceSlider && this.priceSlider.noUiSlider) {
-  //     this.priceSlider.noUiSlider.destroy();
-  //   }
-  // }
+
 
   rangeFilters(): void {
     const priceMin: number = this.prices[0];
@@ -145,11 +144,11 @@ export default class Filters {
       document.getElementById('price-filter__value-min') as HTMLSpanElement,
       document.getElementById('price-filter__value-max') as HTMLSpanElement,
     ];
-    // this.destroyExistingSlider();
 
     const priceSlider = document.getElementById('price-filter__slider') as noUiSlider.target;
     if (priceSlider && priceSlider.noUiSlider) {
-      priceSlider.noUiSlider.destroy();}
+      priceSlider.noUiSlider.destroy();
+    }
 
     noUiSlider.create(priceSlider, {
       start: priceDefault,
@@ -194,9 +193,9 @@ export default class Filters {
     this.getProductsForFilter(this.state);
     this.setAmountInCheckbox();
   }
-  setStatePrice():void{
-    const minPrice =this.productsForFilter.sort((a,b)=> a.price-b.price)[0].price;
-    const maxPrice =this.productsForFilter.sort((a,b)=> b.price-a.price)[0].price;
-    this.state.price = [minPrice,maxPrice];
+  setStatePrice(): void {
+    const minPrice = this.productsForFilter.sort((a, b) => a.price - b.price)[0].price;
+    const maxPrice = this.productsForFilter.sort((a, b) => b.price - a.price)[0].price;
+    this.state.price = [minPrice, maxPrice];
   }
 }
