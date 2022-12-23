@@ -1,7 +1,6 @@
 .filter-checkbox{
 
   &.lock-input{
-    pointer-events: none;
     background: red;
 
   }
@@ -13,4 +12,8 @@
     overflow: scroll;
   }
 
+}
+
+.range-filters{
+  width: 100%;
 }

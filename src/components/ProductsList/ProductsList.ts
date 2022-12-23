@@ -1,7 +1,7 @@
 import { ProductModel } from '../models/product';
 import Products from '../../db/products';
 import ProductItem from '../ProductItem/ProductItem'
-import { STATE_FILTER, Filter } from '../models/filter';
+import { STATE_FILTER, Filter } from '../../utils/filter';
 // import Filters from '../Filters/Filters';
 
 
@@ -38,6 +38,8 @@ export default class ProductsList {
 
   useFilter(filterState: Filter) {
     this.checkboxFilter(filterState);
+    this.rangeFilter(filterState);
+
     this.render();
 
   }
@@ -45,14 +47,28 @@ export default class ProductsList {
   checkboxFilter(filterState: Filter): void {
     localStorage.setItem('Filter', JSON.stringify(filterState));
     const { category, brand }: Filter = filterState;
-    if (category.length > 0||brand.length > 0) {
+    if (category.length > 0 || brand.length > 0) {
       this.products = Products.filter((product) => {
         if (category.length > 0 && !category.includes(product.category)) return false;
         if (brand.length > 0 && !brand.includes(product.brand)) return false;
         return true;
-      })} else {
+      })
+    } else {
       this.products = Products;
 
     }
+  }
+
+  rangeFilter(filterState: Filter): void {
+    const { price}: {
+      price: [number, number] | []
+    } = filterState;
+
+    if (price.length === 2) {
+      this.products = this.products.filter((product) => (
+        product.price >= price[0] && product.price <= price[1]
+      ));
+    }
+
   }
 }
