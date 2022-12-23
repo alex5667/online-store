@@ -15,14 +15,14 @@ export default class Filters {
   categories: string[] = categories;
   brands: string[] = brands;
   prices: number[] = prices;
-  priceSlider: noUiSlider.target;
+  // priceSlider: noUiSlider.target;
   state: Filter;
   productsList: ProductsList;
   productsForFilter: ProductModel[];
   constructor(productsList: ProductsList) {
     const filter: string | null = localStorage.getItem('Filter');
     this.state = filter ? JSON.parse(filter) : STATE_FILTER;
-    this.priceSlider = document.getElementById('price-filter__slider') as noUiSlider.target;
+    // this.priceSlider = document.getElementById('price-filter__slider') as noUiSlider.target;
     this.productsList = productsList;
     this.productsForFilter = Products;
     this.render();
@@ -68,6 +68,7 @@ export default class Filters {
     this.productsList.useFilter(this.state);
     this.getProductsForFilter(this.state);
     this.setAmountInCheckbox();
+    this.rangeFilters();
   }
 
   setBrandFilter(e: Event): void {
@@ -83,6 +84,7 @@ export default class Filters {
     this.productsList.useFilter(this.state);
     this.getProductsForFilter(this.state);
     this.setAmountInCheckbox();
+    this.rangeFilters();
   }
 
   setAmountInCheckbox(): void {
@@ -110,52 +112,59 @@ export default class Filters {
   }
 
   getProductsForFilter(state: Filter) {
-    const { category, brand }: Filter = state;
-    if (category.length > 0 || brand.length > 0) {
+    const { category, brand, price }: Filter = state;
+    if (category.length > 0 || brand.length > 0 || price.length === 2) {
       this.productsForFilter = Products.filter((product) => {
         if (category.length > 0 && !category.includes(product.category)) return false;
         if (brand.length > 0 && !brand.includes(product.brand)) return false;
+        if (price.length === 2) {
+          if (price[0] > product.price) return false;
+          if (price[1] < product.price) return false;
+        }
         return true;
       })
     } else {
       this.productsForFilter = Products;
     }
+    this.setStatePrice();
   }
 
-  destroyExistingSlider(){
-    if(this.priceSlider && this.priceSlider.noUiSlider){
-      this.priceSlider.noUiSlider.destroy();
-    }
-  }
+  // destroyExistingSlider() {
+  //   if (this.priceSlider && this.priceSlider.noUiSlider) {
+  //     this.priceSlider.noUiSlider.destroy();
+  //   }
+  // }
 
   rangeFilters(): void {
     const priceMin: number = this.prices[0];
     const priceMax: number = this.prices[this.prices.length - 1];
-    const priceDefaultMin=this.state.price[0]?this.state.price[0]:priceMin;
-    const priceDefaultMax=this.state.price[1]?this.state.price[1]:priceMax;
+    const priceDefaultMin = this.state.price[0] ? this.state.price[0] : priceMin;
+    const priceDefaultMax = this.state.price[1] ? this.state.price[1] : priceMax;
     const priceDefault: [number, number] = [priceDefaultMin, priceDefaultMax];
     const priceInputs: [HTMLSpanElement, HTMLSpanElement] = [
       document.getElementById('price-filter__value-min') as HTMLSpanElement,
       document.getElementById('price-filter__value-max') as HTMLSpanElement,
     ];
-    this.destroyExistingSlider();
-    this.priceSlider = document.getElementById('price-filter__slider') as noUiSlider.target;
+    // this.destroyExistingSlider();
 
-    noUiSlider.create(this.priceSlider, {
+    const priceSlider = document.getElementById('price-filter__slider') as noUiSlider.target;
+    if (priceSlider && priceSlider.noUiSlider) {
+      priceSlider.noUiSlider.destroy();}
+
+    noUiSlider.create(priceSlider, {
       start: priceDefault,
       connect: true,
       range: { min: priceMin, max: priceMax },
     });
-    const connectElPrice = this.priceSlider.querySelector('.noUi-connect') as HTMLDivElement;
+    const connectElPrice = priceSlider.querySelector('.noUi-connect') as HTMLDivElement;
     if (this.state.price.length === 2) {
-      this.priceSlider.noUiSlider?.set([...this.state.price]);
+      priceSlider.noUiSlider?.set([...this.state.price]);
     } else {
       connectElPrice.classList.add('noUi-connect--unused');
     }
-    this.priceSlider.noUiSlider?.on('update', (values, handle) => {
+    priceSlider.noUiSlider?.on('update', (values, handle) => {
       const element = priceInputs[handle] as HTMLSpanElement;
       element.innerHTML = Math.floor(+values[handle]).toString();
-
       const modifiedValues: [number, number] = [Math.floor(+values[0]), Math.floor(+values[1])];
       if (_.isEqual(priceDefault, modifiedValues) && !connectElPrice.classList.contains('noUi-connect--unused')) {
         connectElPrice.classList.add('noUi-connect--unused');
@@ -163,17 +172,14 @@ export default class Filters {
         connectElPrice.classList.remove('noUi-connect--unused');
       }
     });
-    this.priceSlider.noUiSlider?.on(
-      'change',
+    priceSlider.noUiSlider?.on(
+      'update',
       (values) => this.setPriceFilter(
         priceMin,
         priceMax,
         values as [number, number],
       ),
     );
-
-
-
   }
 
   setPriceFilter(start: number, end: number, values: [number, number]): void {
@@ -185,5 +191,12 @@ export default class Filters {
       this.state.price = [];
     }
     this.productsList.useFilter(this.state);
+    this.getProductsForFilter(this.state);
+    this.setAmountInCheckbox();
+  }
+  setStatePrice():void{
+    const minPrice =this.productsForFilter.sort((a,b)=> a.price-b.price)[0].price;
+    const maxPrice =this.productsForFilter.sort((a,b)=> b.price-a.price)[0].price;
+    this.state.price = [minPrice,maxPrice];
   }
 }
