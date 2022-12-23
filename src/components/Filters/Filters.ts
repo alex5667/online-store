@@ -27,7 +27,9 @@ export default class Filters {
   }
   render(): void {
     this.checkboxFilters();
-    this.rangeFilters();
+    this.rangeFilters(this.prices,this.state.price);
+    this.rangeFilters(this.quantities,this.state.quantity);
+
   }
 
   checkboxFilters(): void {
@@ -68,7 +70,9 @@ export default class Filters {
     this.productsList.useFilter(this.state);
     this.getProductsForFilter(this.state);
     this.setAmountInCheckbox();
-    this.rangeFilters();
+    this.rangeFilters(this.prices,this.state.price);
+    this.rangeFilters(this.quantities,this.state.quantity);
+
 
   }
 
@@ -88,7 +92,9 @@ export default class Filters {
     this.productsList.useFilter(this.state);
     this.getProductsForFilter(this.state);
     this.setAmountInCheckbox();
-    this.rangeFilters();
+    this.rangeFilters(this.prices,this.state.price);
+    this.rangeFilters(this.quantities,this.state.quantity);
+
   }
 
   setAmountInCheckbox(): void {
@@ -135,18 +141,19 @@ export default class Filters {
 
 
 
-  rangeFilters(): void {
-    const priceMin: number = this.prices[0];
-    const priceMax: number = this.prices[this.prices.length - 1];
-    const priceDefaultMin = this.state.price[0] ? this.state.price[0] : priceMin;
-    const priceDefaultMax = this.state.price[1] ? this.state.price[1] : priceMax;
+  rangeFilters(prop: number[], state: [number, number]|[]): void {
+    const selector=prop===this.prices?`price`:`stock`;
+    const priceMin: number = prop[0];
+    const priceMax: number = prop[prop.length - 1];
+    const priceDefaultMin = state[0] ? state[0] : priceMin;
+    const priceDefaultMax = state[1] ? state[1] : priceMax;
     const priceDefault: [number, number] = [priceDefaultMin, priceDefaultMax];
     const priceInputs: [HTMLSpanElement, HTMLSpanElement] = [
-      document.getElementById('price-filter__value-min') as HTMLSpanElement,
-      document.getElementById('price-filter__value-max') as HTMLSpanElement,
+      document.getElementById(`${selector}-filter__value-min`) as HTMLSpanElement,
+      document.getElementById(`${selector}-filter__value-max`) as HTMLSpanElement,
     ];
 
-    const priceSlider = document.getElementById('price-filter__slider') as noUiSlider.target;
+    const priceSlider = document.getElementById(`${selector}-filter__slider`) as noUiSlider.target;
     if (priceSlider && priceSlider.noUiSlider) {
       priceSlider.noUiSlider.destroy();
     }
@@ -157,8 +164,8 @@ export default class Filters {
       range: { min: priceMin, max: priceMax },
     });
     const connectElPrice = priceSlider.querySelector('.noUi-connect') as HTMLDivElement;
-    if (this.state.price.length === 2) {
-      priceSlider.noUiSlider?.set([...this.state.price]);
+    if (state.length === 2) {
+      priceSlider.noUiSlider?.set([...state]);
     }
     else {
       connectElPrice.classList.add('noUi-connect--unused');
@@ -179,17 +186,19 @@ export default class Filters {
         priceMin,
         priceMax,
         values as [number, number],
+        state
       ),
     );
   }
 
-  setPriceFilter(start: number, end: number, values: [number, number]): void {
+  setPriceFilter(start: number, end: number, values: [number, number], states: [number, number]|[]): void {
+    console.log(states)
     const roundedMin: number = Math.floor(values[0]);
     const roundedMax: number = Math.floor(values[1]);
     if (roundedMin > start || roundedMax < end) {
-      this.state.price = [roundedMin, roundedMax];
+      states = [roundedMin, roundedMax];
     } else {
-      this.state.price = [];
+      states = [];
     }
     this.productsList.useFilter(this.state);
     this.getProductsForFilter(this.state);
