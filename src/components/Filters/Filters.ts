@@ -32,6 +32,7 @@ export default class Filters {
     this.sortFilters();
     this.searchFilter();
     this.resetFilter();
+    this.setAmountProducts()
   }
   resetFilter(): void {
     const resetBtn = document.querySelector('.filters__reset-button') as HTMLButtonElement;
@@ -209,7 +210,17 @@ export default class Filters {
       this.productsForFilter = Products;
     }
     this.setStatePrice();
+    this.setAmountProducts();
   }
+  setAmountProducts(){
+    const found= document.getElementById('found') as HTMLSpanElement;
+    const amount =this.productsForFilter.length;
+    console.log(found)
+    console.log(amount)
+
+    found.innerText=`Found: ${amount}`;
+  }
+
 
 
 
