@@ -6,7 +6,8 @@ export default class CheckboxItem {
    templateItem: HTMLTemplateElement;
    sectionElement: HTMLElement;
    element: HTMLLabelElement;
-   constructor(ElementSelector: string, category: string, filterType: string, amount: number) {
+   checked: boolean;
+   constructor(ElementSelector: string, category: string, filterType: string, amount: number, checked = false) {
       this.category = category;
       this.checkboxId = `${filterType}-${category}`;
       this.amount = amount;
@@ -15,6 +16,7 @@ export default class CheckboxItem {
       const clonedNode = document.importNode(this.templateItem.content, true);
       this.element = clonedNode.firstElementChild as HTMLLabelElement;
       this.sectionElement.insertAdjacentElement('afterbegin', this.element);
+      this.checked = checked;
       this.render();
    }
    render(): void {
@@ -27,9 +29,13 @@ export default class CheckboxItem {
       labelElement.htmlFor = this.checkboxId;
       checkboxInput.id = this.checkboxId;
       textLabel.innerText = this.category;
-      textAmountInCheckbox.id=this.category;
-      textAmountInCheckbox.innerText=String(this.amount);
-      textAmountInProperty.innerText=String(this.amount);
+      textAmountInCheckbox.id = this.category;
+      textAmountInCheckbox.innerText = String(this.amount);
+      textAmountInProperty.innerText = String(this.amount);
+
+      if (this.checked) {
+         checkboxInput.checked = true;
+      }
    }
 
 

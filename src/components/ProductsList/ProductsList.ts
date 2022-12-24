@@ -1,7 +1,7 @@
 import { ProductModel } from '../models/product';
 import Products from '../../db/products';
 import ProductItem from '../ProductItem/ProductItem'
-import {SortFilter, STATE_FILTER, Filter } from '../../utils/filter';
+import { SortFilter, STATE_FILTER, Filter } from '../../utils/filter';
 // import Filters from '../Filters/Filters';
 
 
@@ -41,13 +41,11 @@ export default class ProductsList {
     this.rangeFilter(filterState);
     this.sortFilter(filterState);
     this.searchFilter(filterState);
-
-
     this.render();
 
   }
 
-  searchFilter(filterState: Filter){
+  searchFilter(filterState: Filter) {
     const searchValue: string = filterState.search.toLowerCase();
 
     if (searchValue !== '') {
@@ -57,9 +55,10 @@ export default class ProductsList {
         const description: string = product.description.toLowerCase();
         const category: string = product.category.toLowerCase();
         const isExist = (prop: string): boolean => prop.indexOf(searchValue) > -1;
-        return isExist(category)|| isExist(brand)
-           || isExist(description)
-           || isExist(title)
+        return isExist(category)
+          || isExist(brand)
+          || isExist(description)
+          || isExist(title)
       });
 
       this.products = searchResult;
@@ -67,7 +66,7 @@ export default class ProductsList {
 
   }
 
-  sortFilter(filterState: Filter){
+  sortFilter(filterState: Filter) {
     const { sort }: { sort: SortFilter } = filterState;
     const sortedByPrice = (): ProductModel[] => this.products.sort((a, b) => +b.price - +a.price);
     const sortedByRating = (): ProductModel[] => this.products.sort((a, b) => +b.rating - +a.rating);
@@ -120,6 +119,7 @@ export default class ProductsList {
         product.price >= price[0] && product.price <= price[1]
       ));
     }
-
   }
+
+
 }

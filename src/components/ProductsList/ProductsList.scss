@@ -2,8 +2,9 @@
 .products{
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: rem(30);
-
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: rem(10);
+  overflow: hidden;
+  padding: rem(5);
 }

@@ -32,7 +32,8 @@ export default class Filters {
     this.sortFilters();
     this.searchFilter();
     this.resetFilter();
-    this.setAmountProducts()
+    this.setAmountProducts();
+    this.changeView();
   }
   resetFilter(): void {
     const resetBtn = document.querySelector('.filters__reset-button') as HTMLButtonElement;
@@ -104,7 +105,9 @@ export default class Filters {
         '.category-filter .filter__items',
         category,
         'category-filter',
-        amount
+        amount,
+        this.state.category.includes(category),
+
       ).element.addEventListener('change', this.setCategoryFilter.bind(this))
     }
     )
@@ -115,7 +118,8 @@ export default class Filters {
         '.brand-filter .filter__items',
         brand,
         'brand-filter',
-        amount
+        amount,
+        this.state.brand.includes(brand),
       ).element.addEventListener('change', this.setBrandFilter.bind(this))
     });
   }
@@ -163,7 +167,6 @@ export default class Filters {
     this.setAmountInCheckbox();
     this.rangeFilters(this.prices, this.state.price);
     this.rangeFilters(this.quantities, this.state.quantity);
-
   }
 
   setAmountInCheckbox(): void {
@@ -215,9 +218,6 @@ export default class Filters {
   setAmountProducts(){
     const found= document.getElementById('found') as HTMLSpanElement;
     const amount =this.productsForFilter.length;
-    console.log(found)
-    console.log(amount)
-
     found.innerText=`Found: ${amount}`;
   }
 
@@ -275,13 +275,17 @@ export default class Filters {
   }
 
   setFilterRange(start: number, end: number, values: [number, number], selector: string): void {
+
     const roundedMin: number = Math.floor(values[0]);
     const roundedMax: number = Math.floor(values[1]);
     if (roundedMin > start || roundedMax < end) {
-      selector === 'price' ? this.state.price : this.state.quantity = [roundedMin, roundedMax];
+      console.log(selector === 'price')
+
+      selector === 'price' ? this.state.price= [roundedMin, roundedMax] : this.state.quantity = [roundedMin, roundedMax];
     } else {
-      selector === 'price' ? this.state.price : this.state.quantity = [];
+      selector === 'price' ? this.state.price = []: this.state.quantity = [];
     }
+
     this.productsList.useFilter(this.state);
     this.getProductsForFilter(this.state);
     this.setAmountInCheckbox();
@@ -293,5 +297,19 @@ export default class Filters {
     const maxQuantity = this.productsForFilter.sort((a, b) => b.stock - a.stock)[0].stock;
     this.state.price = [minPrice, maxPrice];
     this.state.quantity = [minQuantity, maxQuantity];
+  }
+  changeView():void{
+    const smallView= document.getElementById('small-view');
+    const largeView= document.getElementById('large-view')
+    smallView?.addEventListener('click',()=>{
+      const productItems= document.querySelectorAll('.product')
+      productItems.forEach((card)=> card.classList.remove('large'))
+      productItems.forEach((card)=> card.classList.add('small'))
+    });
+    largeView?.addEventListener('click',()=>{
+      const productItems= document.querySelectorAll('.product')
+      productItems.forEach((card)=> card.classList.remove('small'))
+      productItems.forEach((card)=> card.classList.add('large'))
+    });
   }
 }
