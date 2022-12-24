@@ -12,7 +12,7 @@
     <div class="wrapper">
         <header>
             <div class="header__container">
-                <h1>  Online </h1>
+                <h1> Online </h1>
             </div>
 
         </header>
@@ -34,35 +34,30 @@
                             <span class="filter__title">Price</span>
                             <div id="price-filter__slider"></div>
                             <div class="filter__values">
-                                <span
-                                    id="price-filter__value-min"
-                                    class="filter__value"
-                                ></span>
+                                <span id="price-filter__value-min" class="filter__value"></span>
                                 –
-                                <span
-                                    id="price-filter__value-max"
-                                    class="filter__value"
-                                ></span>
+                                <span id="price-filter__value-max" class="filter__value"></span>
                             </div>
                         </div>
                         <div class="filter stock-filter">
                             <span class="filter__title">Stock</span>
                             <div id="stock-filter__slider"></div>
                             <div class="filter__values">
-                                <span
-                                    id="stock-filter__value-min"
-                                    class="filter__value"
-                                ></span>
+                                <span id="stock-filter__value-min" class="filter__value"></span>
                                 –
-                                <span
-                                    id="stock-filter__value-max"
-                                    class="filter__value"
-                                ></span>
+                                <span id="stock-filter__value-max" class="filter__value"></span>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="main__content"></div>
+                <div class="main__content">
+                    <div class="content__sort-filter">
+                        <select name="sort" id="sort-filter" class="sort-filter">
+                            <option value="PRICE">Sort by price ASC</option>
+                            <option value="PRICE_REVERSE">Sort by price DESC</option>
+                        </select>
+                    </div>
+                </div>
 
 
             </div>
@@ -82,7 +77,8 @@
             <input type="checkbox" id="" class="filter-checkbox__input" />
             <span class="filter-checkbox__text-label"></span>
             <span class="filter-checkbox__text-amount">
-                    (<span id="" class="filter-checkbox__text-amount-in-checkbox"></span>/<span class="filter-checkbox__text-amount-in-property">0</span>)
+                (<span id="" class="filter-checkbox__text-amount-in-checkbox"></span>/<span
+                    class="filter-checkbox__text-amount-in-property">0</span>)
             </span>
         </label>
     </template>

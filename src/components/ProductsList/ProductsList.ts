@@ -21,7 +21,7 @@ export default class ProductsList {
     this.templateItem = document.getElementById('products-list') as HTMLTemplateElement;
     const clonedNode = document.importNode(this.templateItem.content, true);
     this.element = clonedNode.firstElementChild as HTMLElement;
-    this.sectionElement.insertAdjacentElement('afterbegin', this.element);
+    this.sectionElement.insertAdjacentElement('beforeend', this.element);
     const filterState: string | null = localStorage.getItem('Filter');
     this.useFilter(filterState ? JSON.parse(filterState) : STATE_FILTER);
 
@@ -39,7 +39,15 @@ export default class ProductsList {
   useFilter(filterState: Filter) {
     this.checkboxFilter(filterState);
     this.rangeFilter(filterState);
+    this.sortFilter(filterState);
+
     this.render();
+
+  }
+
+  sortFilter(filterState: Filter){
+    
+
   }
 
   checkboxFilter(filterState: Filter): void {

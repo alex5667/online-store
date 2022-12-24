@@ -2,7 +2,7 @@
 import * as noUiSlider from 'nouislider';
 import _ from 'lodash';
 import { ProductModel } from '../models/product';
-import { STATE_FILTER, Filter } from '../../utils/filter';
+import {SortFilter, STATE_FILTER, Filter } from '../../utils/filter';
 import { categories, brands, prices, quantities } from '../../db/productsProperties';
 
 import CheckboxItem from '../Filters/Checkbox/CheckboxItem';
@@ -19,18 +19,39 @@ export default class Filters {
   state: Filter;
   productsList: ProductsList;
   productsForFilter: ProductModel[];
+  sortInput: HTMLSelectElement;
   constructor(productsList: ProductsList) {
     const filter: string | null = localStorage.getItem('Filter');
     this.state = filter ? JSON.parse(filter) : STATE_FILTER;
     this.productsList = productsList;
     this.productsForFilter = Products;
+    this.sortInput = document.getElementById('sort-filter') as HTMLSelectElement;
+
   }
   render(): void {
     this.checkboxFilters();
     this.rangeFilters(this.prices,this.state.price);
     this.rangeFilters(this.quantities,this.state.quantity);
+    this.sortFilters();
 
   }
+  sortFilters(): void {
+    this.sortInput.value = this.state.sort;
+    this.sortInput.addEventListener('change', (e: Event) => this.setSortFilter(e.target as HTMLSelectElement));
+  }
+  setSortFilter(select: HTMLSelectElement): void {
+    const { value }: { value: string } = select;
+
+    this.state = {
+      ...this.state,
+      sort: value as SortFilter,
+    };
+
+    this.productsList.useFilter(this.state);
+  }
+
+
+
 
   checkboxFilters(): void {
     categories.forEach((category) => {
