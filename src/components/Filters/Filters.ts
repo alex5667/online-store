@@ -2,7 +2,7 @@
 import * as noUiSlider from 'nouislider';
 import _ from 'lodash';
 import { ProductModel } from '../models/product';
-import {SortFilter, STATE_FILTER, Filter } from '../../utils/filter';
+import { SortFilter, STATE_FILTER, Filter } from '../../utils/filter';
 import { categories, brands, prices, quantities } from '../../db/productsProperties';
 
 import CheckboxItem from '../Filters/Checkbox/CheckboxItem';
@@ -24,17 +24,64 @@ export default class Filters {
     this.state = filter ? JSON.parse(filter) : STATE_FILTER;
     this.productsList = productsList;
     this.productsForFilter = Products;
- 
+
 
   }
   render(): void {
     this.checkboxFilters();
-    this.rangeFilters(this.prices,this.state.price);
-    this.rangeFilters(this.quantities,this.state.quantity);
+    this.rangeFilters(this.prices, this.state.price);
+    this.rangeFilters(this.quantities, this.state.quantity);
     this.sortFilters();
     this.searchFilter();
+    this.resetFilter();
 
   }
+  resetFilter(): void {
+    const resetBtn = document.querySelector('.filters__reset-button') as HTMLButtonElement;
+    resetBtn.addEventListener('click', () => this.resetFilters());
+  }
+  resetFilters(): void {
+
+    this.state = STATE_FILTER;
+    // this.state = {
+    //   ...JSON.parse(JSON.stringify(STATE_FILTER)),
+    //   category: this.state.category,
+    //   sort: this.state.sort,
+    //   search: this.state.search,
+    // };
+    const filters = document.querySelectorAll('.filter__items') as NodeListOf<HTMLElement>
+    filters.forEach((filter: HTMLElement) => {
+      if (filter) {
+        while (filter.firstChild()) {
+          filter.removeChild(filter.firstChild())
+        }
+
+      }
+    }
+    )
+    // this.render()
+    // this.resetCheckboxFilter();
+    // this.resetRangeFilters();
+    this.productsList.useFilter(this.state);
+  }
+
+  // resetRangeFilters(): void {
+  //   const quantitySlider = document.getElementById('quantity-filter__slider') as noUiSlider.target;
+  //   const priceSlider = document.getElementById('price-filter__slider') as noUiSlider.target;
+
+  //   quantitySlider.noUiSlider?.reset();
+  //   priceSlider.noUiSlider?.reset();
+  // }
+
+  // resetCheckboxFilter(): void {
+  //   const checkboxInputs = document.querySelectorAll('.filter-checkbox__input') as NodeListOf<HTMLInputElement>;
+  //   checkboxInputs.forEach((input)=> input.checked = false)
+  // }
+
+
+
+
+
   sortFilters(): void {
     const sortInput = document.getElementById('sort-filter') as HTMLSelectElement;
     sortInput.value = this.state.sort;
@@ -49,10 +96,10 @@ export default class Filters {
     };
     this.productsList.useFilter(this.state);
   }
-  searchFilter(): void{
+  searchFilter(): void {
     const searchInput = document.getElementById('search-filter') as HTMLInputElement;
     searchInput.focus();
-    searchInput.value =this.state.search !== ''? this.state.search:'';
+    searchInput.value = this.state.search !== '' ? this.state.search : '';
     const callback = (e: Event): void => this.setSearchFilter(e);
     searchInput.addEventListener('input', _.debounce(callback, 500));
   }
@@ -110,8 +157,8 @@ export default class Filters {
     this.productsList.useFilter(this.state);
     this.getProductsForFilter(this.state);
     this.setAmountInCheckbox();
-    this.rangeFilters(this.prices,this.state.price);
-    this.rangeFilters(this.quantities,this.state.quantity);
+    this.rangeFilters(this.prices, this.state.price);
+    this.rangeFilters(this.quantities, this.state.quantity);
 
 
   }
@@ -133,8 +180,8 @@ export default class Filters {
     this.productsList.useFilter(this.state);
     this.getProductsForFilter(this.state);
     this.setAmountInCheckbox();
-    this.rangeFilters(this.prices,this.state.price);
-    this.rangeFilters(this.quantities,this.state.quantity);
+    this.rangeFilters(this.prices, this.state.price);
+    this.rangeFilters(this.quantities, this.state.quantity);
 
   }
 
@@ -163,8 +210,8 @@ export default class Filters {
   }
 
   getProductsForFilter(state: Filter) {
-    const { category, brand, price,quantity }: Filter = state;
-    if (category.length > 0 || brand.length > 0 || price.length === 2||quantity.length===2) {
+    const { category, brand, price, quantity }: Filter = state;
+    if (category.length > 0 || brand.length > 0 || price.length === 2 || quantity.length === 2) {
       this.productsForFilter = Products.filter((product) => {
         if (category.length > 0 && !category.includes(product.category)) return false;
         if (brand.length > 0 && !brand.includes(product.brand)) return false;
@@ -186,8 +233,8 @@ export default class Filters {
 
 
 
-  rangeFilters(prop: number[], state: [number, number]|[]): void {
-    const selector=prop===this.prices?`price`:`stock`;
+  rangeFilters(prop: number[], state: [number, number] | []): void {
+    const selector = prop === this.prices ? `price` : `stock`;
     const Min: number = prop[0];
     const Max: number = prop[prop.length - 1];
     const DefaultMin = state[0] ? state[0] : Min;
@@ -240,9 +287,9 @@ export default class Filters {
     const roundedMin: number = Math.floor(values[0]);
     const roundedMax: number = Math.floor(values[1]);
     if (roundedMin > start || roundedMax < end) {
-      selector==='price'? this.state.price:this.state.quantity = [roundedMin, roundedMax];
+      selector === 'price' ? this.state.price : this.state.quantity = [roundedMin, roundedMax];
     } else {
-      selector==='price'? this.state.price:this.state.quantity = [];
+      selector === 'price' ? this.state.price : this.state.quantity = [];
     }
     this.productsList.useFilter(this.state);
     this.getProductsForFilter(this.state);
