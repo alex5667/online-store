@@ -19,13 +19,12 @@ export default class Filters {
   state: Filter;
   productsList: ProductsList;
   productsForFilter: ProductModel[];
-  sortInput: HTMLSelectElement;
   constructor(productsList: ProductsList) {
     const filter: string | null = localStorage.getItem('Filter');
     this.state = filter ? JSON.parse(filter) : STATE_FILTER;
     this.productsList = productsList;
     this.productsForFilter = Products;
-    this.sortInput = document.getElementById('sort-filter') as HTMLSelectElement;
+ 
 
   }
   render(): void {
@@ -33,12 +32,15 @@ export default class Filters {
     this.rangeFilters(this.prices,this.state.price);
     this.rangeFilters(this.quantities,this.state.quantity);
     this.sortFilters();
+    this.searchFilter();
 
   }
   sortFilters(): void {
-    this.sortInput.value = this.state.sort;
-    this.sortInput.addEventListener('change', (e: Event) => this.setSortFilter(e.target as HTMLSelectElement));
+    const sortInput = document.getElementById('sort-filter') as HTMLSelectElement;
+    sortInput.value = this.state.sort;
+    sortInput.addEventListener('change', (e: Event) => this.setSortFilter(e.target as HTMLSelectElement));
   }
+
   setSortFilter(select: HTMLSelectElement): void {
     const { value }: { value: string } = select;
     this.state = {
@@ -47,7 +49,23 @@ export default class Filters {
     };
     this.productsList.useFilter(this.state);
   }
+  searchFilter(): void{
+    const searchInput = document.getElementById('search-filter') as HTMLInputElement;
+    searchInput.focus();
+    searchInput.value =this.state.search !== ''? this.state.search:'';
+    const callback = (e: Event): void => this.setSearchFilter(e);
+    searchInput.addEventListener('input', _.debounce(callback, 500));
+  }
 
+  setSearchFilter(e: Event): void {
+    const target = e.target as HTMLInputElement;
+    if (target.value) {
+      this.state.search = target.value;
+    } else {
+      this.state.search = '';
+    }
+    this.productsList.useFilter(this.state);
+  }
 
 
 

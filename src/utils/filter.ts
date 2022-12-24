@@ -15,7 +15,7 @@ export interface Filter {
   price: [number, number] | [];
   quantity: [number, number] | [];
   sort: SortFilter;
-
+  search: string;
 }
 
 export const STATE_FILTER: Filter = {
@@ -23,5 +23,7 @@ export const STATE_FILTER: Filter = {
   brand: [],
   price: [],
   quantity: [],
-  sort: SortFilter.DEFAULT
+  sort: SortFilter.DEFAULT,
+  search: '',
+
 }

@@ -22,3 +22,12 @@ export const quantities: number[] = products.reduce((a: number[], c: ProductMode
   if (!a.includes(c.stock)) a.push(c.stock);
   return a;
 }, []).sort((a, b) => +a - +b);
+
+export const titles: string[] = products.reduce((a: string[], c: ProductModel): string[] => {
+  if (!a.includes(c.title)) a.push(c.title);
+  return a;
+}, []).sort((a, b) => b.localeCompare(a));
+export const descriptions: string[] = products.reduce((a: string[], c: ProductModel): string[] => {
+  if (!a.includes(c.description)) a.push(c.description);
+  return a;
+}, []).sort((a, b) => b.localeCompare(a));

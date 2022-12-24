@@ -40,8 +40,31 @@ export default class ProductsList {
     this.checkboxFilter(filterState);
     this.rangeFilter(filterState);
     this.sortFilter(filterState);
+    this.searchFilter(filterState);
+
 
     this.render();
+
+  }
+
+  searchFilter(filterState: Filter){
+    const searchValue: string = filterState.search.toLowerCase();
+
+    if (searchValue !== '') {
+      const searchResult: ProductModel[] = this.products.filter((product) => {
+        const title: string = product.title.toLowerCase();
+        const brand: string = product.brand.toLowerCase();
+        const description: string = product.description.toLowerCase();
+        const category: string = product.category.toLowerCase();
+
+        const isExist = (prop: string): boolean => prop.indexOf(searchValue) > -1;
+        return isExist(category)|| isExist(brand)
+           || isExist(description)
+           || isExist(title)
+      });
+
+      this.products = searchResult;
+    }
 
   }
 
