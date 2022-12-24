@@ -63,9 +63,12 @@ export default class Filters {
     if (checkbox.checked) {
       this.state.category.push(category);
       this.state.price = [];
+      this.state.quantity = [];
     } else {
       this.state.category = this.state.category.filter((el) => el !== category);
       this.state.price = [];
+      this.state.quantity = [];
+
     }
     this.productsList.useFilter(this.state);
     this.getProductsForFilter(this.state);
@@ -84,10 +87,11 @@ export default class Filters {
     if (checkbox.checked) {
       this.state.brand.push(brand);
       this.state.price = [];
+      this.state.quantity = [];
     } else {
       this.state.brand = this.state.brand.filter((el) => el !== brand);
       this.state.price = [];
-
+      this.state.quantity = [];
     }
     this.productsList.useFilter(this.state);
     this.getProductsForFilter(this.state);
@@ -122,14 +126,18 @@ export default class Filters {
   }
 
   getProductsForFilter(state: Filter) {
-    const { category, brand, price }: Filter = state;
-    if (category.length > 0 || brand.length > 0 || price.length === 2) {
+    const { category, brand, price,quantity }: Filter = state;
+    if (category.length > 0 || brand.length > 0 || price.length === 2||quantity.length===2) {
       this.productsForFilter = Products.filter((product) => {
         if (category.length > 0 && !category.includes(product.category)) return false;
         if (brand.length > 0 && !brand.includes(product.brand)) return false;
         if (price.length === 2) {
           if (price[0] > product.price) return false;
           if (price[1] < product.price) return false;
+        }
+        if (quantity.length === 2) {
+          if (quantity[0] > product.stock) return false;
+          if (quantity[1] < product.stock) return false;
         }
         return true;
       })
@@ -143,62 +151,61 @@ export default class Filters {
 
   rangeFilters(prop: number[], state: [number, number]|[]): void {
     const selector=prop===this.prices?`price`:`stock`;
-    const priceMin: number = prop[0];
-    const priceMax: number = prop[prop.length - 1];
-    const priceDefaultMin = state[0] ? state[0] : priceMin;
-    const priceDefaultMax = state[1] ? state[1] : priceMax;
-    const priceDefault: [number, number] = [priceDefaultMin, priceDefaultMax];
-    const priceInputs: [HTMLSpanElement, HTMLSpanElement] = [
+    const Min: number = prop[0];
+    const Max: number = prop[prop.length - 1];
+    const DefaultMin = state[0] ? state[0] : Min;
+    const DefaultMax = state[1] ? state[1] : Max;
+    const Default: [number, number] = [DefaultMin, DefaultMax];
+    const Inputs: [HTMLSpanElement, HTMLSpanElement] = [
       document.getElementById(`${selector}-filter__value-min`) as HTMLSpanElement,
       document.getElementById(`${selector}-filter__value-max`) as HTMLSpanElement,
     ];
 
-    const priceSlider = document.getElementById(`${selector}-filter__slider`) as noUiSlider.target;
-    if (priceSlider && priceSlider.noUiSlider) {
-      priceSlider.noUiSlider.destroy();
+    const Slider = document.getElementById(`${selector}-filter__slider`) as noUiSlider.target;
+    if (Slider && Slider.noUiSlider) {
+      Slider.noUiSlider.destroy();
     }
 
-    noUiSlider.create(priceSlider, {
-      start: priceDefault,
+    noUiSlider.create(Slider, {
+      start: Default,
       connect: true,
-      range: { min: priceMin, max: priceMax },
+      range: { min: Min, max: Max },
     });
-    const connectElPrice = priceSlider.querySelector('.noUi-connect') as HTMLDivElement;
+    const connectEl = Slider.querySelector('.noUi-connect') as HTMLDivElement;
     if (state.length === 2) {
-      priceSlider.noUiSlider?.set([...state]);
+      Slider.noUiSlider?.set([...state]);
     }
     else {
-      connectElPrice.classList.add('noUi-connect--unused');
+      connectEl.classList.add('noUi-connect--unused');
     }
-    priceSlider.noUiSlider?.on('update', (values, handle) => {
-      const element = priceInputs[handle] as HTMLSpanElement;
+    Slider.noUiSlider?.on('update', (values, handle) => {
+      const element = Inputs[handle] as HTMLSpanElement;
       element.innerHTML = Math.floor(+values[handle]).toString();
       const modifiedValues: [number, number] = [Math.floor(+values[0]), Math.floor(+values[1])];
-      if (_.isEqual(priceDefault, modifiedValues) && !connectElPrice.classList.contains('noUi-connect--unused')) {
-        connectElPrice.classList.add('noUi-connect--unused');
-      } else if (!_.isEqual(priceDefault, modifiedValues) && connectElPrice.classList.contains('noUi-connect--unused')) {
-        connectElPrice.classList.remove('noUi-connect--unused');
+      if (_.isEqual(Default, modifiedValues) && !connectEl.classList.contains('noUi-connect--unused')) {
+        connectEl.classList.add('noUi-connect--unused');
+      } else if (!_.isEqual(Default, modifiedValues) && connectEl.classList.contains('noUi-connect--unused')) {
+        connectEl.classList.remove('noUi-connect--unused');
       }
     });
-    priceSlider.noUiSlider?.on(
+    Slider.noUiSlider?.on(
       'update',
-      (values) => this.setPriceFilter(
-        priceMin,
-        priceMax,
+      (values) => this.setFilterRange(
+        Min,
+        Max,
         values as [number, number],
-        state
+        selector
       ),
     );
   }
 
-  setPriceFilter(start: number, end: number, values: [number, number], states: [number, number]|[]): void {
-    console.log(states)
+  setFilterRange(start: number, end: number, values: [number, number], selector: string): void {
     const roundedMin: number = Math.floor(values[0]);
     const roundedMax: number = Math.floor(values[1]);
     if (roundedMin > start || roundedMax < end) {
-      states = [roundedMin, roundedMax];
+      selector==='price'? this.state.price:this.state.quantity = [roundedMin, roundedMax];
     } else {
-      states = [];
+      selector==='price'? this.state.price:this.state.quantity = [];
     }
     this.productsList.useFilter(this.state);
     this.getProductsForFilter(this.state);
@@ -207,6 +214,10 @@ export default class Filters {
   setStatePrice(): void {
     const minPrice = this.productsForFilter.sort((a, b) => a.price - b.price)[0].price;
     const maxPrice = this.productsForFilter.sort((a, b) => b.price - a.price)[0].price;
+    const minQuantity = this.productsForFilter.sort((a, b) => a.stock - b.stock)[0].stock;
+    const maxQuantity = this.productsForFilter.sort((a, b) => b.stock - a.stock)[0].stock;
     this.state.price = [minPrice, maxPrice];
+    this.state.quantity = [minQuantity, maxQuantity];
+
   }
 }
