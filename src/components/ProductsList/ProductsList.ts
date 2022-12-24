@@ -56,7 +56,6 @@ export default class ProductsList {
         const brand: string = product.brand.toLowerCase();
         const description: string = product.description.toLowerCase();
         const category: string = product.category.toLowerCase();
-
         const isExist = (prop: string): boolean => prop.indexOf(searchValue) > -1;
         return isExist(category)|| isExist(brand)
            || isExist(description)

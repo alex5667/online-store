@@ -24,8 +24,6 @@ export default class Filters {
     this.state = filter ? JSON.parse(filter) : STATE_FILTER;
     this.productsList = productsList;
     this.productsForFilter = Products;
-
-
   }
   render(): void {
     this.checkboxFilters();
@@ -34,51 +32,33 @@ export default class Filters {
     this.sortFilters();
     this.searchFilter();
     this.resetFilter();
-
   }
   resetFilter(): void {
     const resetBtn = document.querySelector('.filters__reset-button') as HTMLButtonElement;
     resetBtn.addEventListener('click', () => this.resetFilters());
   }
-  resetFilters(): void {
 
-    this.state = STATE_FILTER;
-    // this.state = {
-    //   ...JSON.parse(JSON.stringify(STATE_FILTER)),
-    //   category: this.state.category,
-    //   sort: this.state.sort,
-    //   search: this.state.search,
-    // };
+
+  resetFilters(): void {
+    this.state = {
+      category: [],
+      brand: [],
+      price: [],
+      quantity: [],
+      sort: SortFilter.DEFAULT,
+      search: '',
+    };
+    localStorage.removeItem('Filter');
     const filters = document.querySelectorAll('.filter__items') as NodeListOf<HTMLElement>
     filters.forEach((filter: HTMLElement) => {
-      if (filter) {
-        while (filter.firstChild()) {
-          filter.removeChild(filter.firstChild())
-        }
-
+      while (filter.hasChildNodes()) {
+        filter.removeChild(filter.children[0]);
       }
     }
     )
-    // this.render()
-    // this.resetCheckboxFilter();
-    // this.resetRangeFilters();
+    this.render()
     this.productsList.useFilter(this.state);
   }
-
-  // resetRangeFilters(): void {
-  //   const quantitySlider = document.getElementById('quantity-filter__slider') as noUiSlider.target;
-  //   const priceSlider = document.getElementById('price-filter__slider') as noUiSlider.target;
-
-  //   quantitySlider.noUiSlider?.reset();
-  //   priceSlider.noUiSlider?.reset();
-  // }
-
-  // resetCheckboxFilter(): void {
-  //   const checkboxInputs = document.querySelectorAll('.filter-checkbox__input') as NodeListOf<HTMLInputElement>;
-  //   checkboxInputs.forEach((input)=> input.checked = false)
-  // }
-
-
 
 
 

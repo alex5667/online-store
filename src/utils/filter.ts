@@ -25,5 +25,4 @@ export const STATE_FILTER: Filter = {
   quantity: [],
   sort: SortFilter.DEFAULT,
   search: '',
-
 }
