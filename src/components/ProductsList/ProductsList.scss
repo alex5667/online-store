@@ -3,8 +3,9 @@
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
-  justify-content: space-between;
-  gap: rem(10);
+  justify-content: stretch;
+  gap: rem(20);
   overflow: hidden;
   padding: rem(5);
+  width: 100%;
 }
