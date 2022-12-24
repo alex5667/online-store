@@ -1,7 +1,7 @@
 import { ProductModel } from '../models/product';
 import Products from '../../db/products';
 import ProductItem from '../ProductItem/ProductItem'
-import { STATE_FILTER, Filter } from '../../utils/filter';
+import {SortFilter, STATE_FILTER, Filter } from '../../utils/filter';
 // import Filters from '../Filters/Filters';
 
 
@@ -46,8 +46,32 @@ export default class ProductsList {
   }
 
   sortFilter(filterState: Filter){
-    
-
+    const { sort }: { sort: SortFilter } = filterState;
+    const sortedByPrice = (): ProductModel[] => this.products.sort((a, b) => +b.price - +a.price);
+    const sortedByRating = (): ProductModel[] => this.products.sort((a, b) => +b.rating - +a.rating);
+    const sortedByDiscount = (): ProductModel[] => this.products.sort((a, b) => +b.discountPercentage - +a.discountPercentage);
+    switch (sort) {
+      case SortFilter.PRICE:
+        this.products = sortedByPrice();
+        break;
+      case SortFilter.PRICE_REVERSE:
+        this.products = sortedByPrice().reverse();
+        break;
+      case SortFilter.RATING:
+        this.products = sortedByRating();
+        break;
+      case SortFilter.RATING_REVERSE:
+        this.products = sortedByRating().reverse();
+        break;
+      case SortFilter.DISCOUNT:
+        this.products = sortedByDiscount();
+        break;
+      case SortFilter.DISCOUNT_REVERSE:
+        this.products = sortedByDiscount().reverse();
+        break;
+      default:
+        this.products = this.products.sort((a, b) => +a.id - +b.id);
+    }
   }
 
   checkboxFilter(filterState: Filter): void {

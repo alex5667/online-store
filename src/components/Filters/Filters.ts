@@ -41,12 +41,10 @@ export default class Filters {
   }
   setSortFilter(select: HTMLSelectElement): void {
     const { value }: { value: string } = select;
-
     this.state = {
       ...this.state,
       sort: value as SortFilter,
     };
-
     this.productsList.useFilter(this.state);
   }
 
@@ -239,6 +237,5 @@ export default class Filters {
     const maxQuantity = this.productsForFilter.sort((a, b) => b.stock - a.stock)[0].stock;
     this.state.price = [minPrice, maxPrice];
     this.state.quantity = [minQuantity, maxQuantity];
-
   }
 }

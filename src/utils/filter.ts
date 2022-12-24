@@ -1,7 +1,12 @@
 
 export enum SortFilter {
+  DEFAULT = 'DEFAULT',
   PRICE = 'PRICE',
   PRICE_REVERSE = 'PRICE_REVERSE',
+  RATING = 'RATING',
+  RATING_REVERSE = 'RATING_REVERSE',
+  DISCOUNT = 'DISCOUNT',
+  DISCOUNT_REVERSE = 'DISCOUNT_REVERSE',
 
 }
 export interface Filter {
@@ -18,5 +23,5 @@ export const STATE_FILTER: Filter = {
   brand: [],
   price: [],
   quantity: [],
-  sort: SortFilter.PRICE
+  sort: SortFilter.DEFAULT
 }
