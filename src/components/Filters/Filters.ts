@@ -11,6 +11,7 @@ import Products from '../../db/products';
 
 
 
+
 export default class Filters {
   categories: string[] = categories;
   brands: string[] = brands;
@@ -83,7 +84,18 @@ export default class Filters {
     searchInput.focus();
     searchInput.value = this.state.search !== '' ? this.state.search : '';
     const callback = (e: Event): void => this.setSearchFilter(e);
-    searchInput.addEventListener('input', _.debounce(callback, 500));
+
+    searchInput.addEventListener('input', this.debounce(callback, 500));
+  }
+
+  debounce<T extends (...params: Event[]) => void>(fn: T, ms: number) {
+    let timeout: NodeJS.Timeout;
+    return function (this: Event, ...args: Event[]) {
+      const fnCall = () => { fn.apply(this, args) };
+      clearTimeout(timeout);
+      timeout = setTimeout(fnCall, ms)
+    }
+
   }
 
   setSearchFilter(e: Event): void {
@@ -215,10 +227,10 @@ export default class Filters {
     this.setStatePrice();
     this.setAmountProducts();
   }
-  setAmountProducts(){
-    const found= document.getElementById('found') as HTMLSpanElement;
-    const amount =this.productsForFilter.length;
-    found.innerText=`Found: ${amount}`;
+  setAmountProducts() {
+    const found = document.getElementById('found') as HTMLSpanElement;
+    const amount = this.productsForFilter.length;
+    found.innerText = `Found: ${amount}`;
   }
 
 
@@ -279,11 +291,9 @@ export default class Filters {
     const roundedMin: number = Math.floor(values[0]);
     const roundedMax: number = Math.floor(values[1]);
     if (roundedMin > start || roundedMax < end) {
-      console.log(selector === 'price')
-
-      selector === 'price' ? this.state.price= [roundedMin, roundedMax] : this.state.quantity = [roundedMin, roundedMax];
+      selector === 'price' ? this.state.price = [roundedMin, roundedMax] : this.state.quantity = [roundedMin, roundedMax];
     } else {
-      selector === 'price' ? this.state.price = []: this.state.quantity = [];
+      selector === 'price' ? this.state.price = [] : this.state.quantity = [];
     }
 
     this.productsList.useFilter(this.state);
@@ -298,18 +308,18 @@ export default class Filters {
     this.state.price = [minPrice, maxPrice];
     this.state.quantity = [minQuantity, maxQuantity];
   }
-  changeView():void{
-    const smallView= document.getElementById('small-view');
-    const largeView= document.getElementById('large-view')
-    smallView?.addEventListener('click',()=>{
-      const productItems= document.querySelectorAll('.product')
-      productItems.forEach((card)=> card.classList.remove('large'))
-      productItems.forEach((card)=> card.classList.add('small'))
+  changeView(): void {
+    const smallView = document.getElementById('small-view');
+    const largeView = document.getElementById('large-view')
+    smallView?.addEventListener('click', () => {
+      const productItems = document.querySelectorAll('.product')
+      productItems.forEach((card) => card.classList.remove('large'))
+      productItems.forEach((card) => card.classList.add('small'))
     });
-    largeView?.addEventListener('click',()=>{
-      const productItems= document.querySelectorAll('.product')
-      productItems.forEach((card)=> card.classList.remove('small'))
-      productItems.forEach((card)=> card.classList.add('large'))
+    largeView?.addEventListener('click', () => {
+      const productItems = document.querySelectorAll('.product')
+      productItems.forEach((card) => card.classList.remove('small'))
+      productItems.forEach((card) => card.classList.add('large'))
     });
   }
 }
