@@ -4,11 +4,9 @@ import _ from 'lodash';
 import { ProductModel } from '../models/product';
 import { SortFilter, STATE_FILTER, Filter } from '../../utils/filter';
 import { categories, brands, prices, quantities } from '../../db/productsProperties';
-
 import CheckboxItem from '../Filters/Checkbox/CheckboxItem';
 import ProductsList from '../ProductsList/ProductsList';
 import Products from '../../db/products';
-
 
 
 
@@ -149,7 +147,6 @@ export default class Filters {
       this.state.category = this.state.category.filter((el) => el !== category);
       this.state.price = [];
       this.state.quantity = [];
-
     }
     this.productsList.useFilter(this.state);
     this.getProductsForFilter(this.state);

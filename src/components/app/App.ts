@@ -1,10 +1,21 @@
+import MainFilters from '../view/MainFilters';
+import MainContent from '../view/MainContent';
 import ProductsList from '../ProductsList/ProductsList';
-import Filters from '../Filters/Filters'
+import Filters from '../Filters/Filters';
+
+
 export default class App {
-  productsList: ProductsList= new ProductsList();
-  filters:Filters= new Filters(this.productsList);
+  mainFilters:MainFilters;
+  mainContent:MainContent;
+
+  productsList: ProductsList;
+  filters:Filters;
+
   constructor() {
-    this.filters
+    this.mainFilters= new MainFilters();
+    this.mainContent=new MainContent();
+    this.productsList= new ProductsList();
+    this.filters= new Filters(this.productsList)
   }
   start() {
 

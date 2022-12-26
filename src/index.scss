@@ -1,12 +1,12 @@
 @use "sass:math";
 
 @import "./scss/base/mixins.scss";
+@import "./scss/style.scss";
+@import "./components/Filters/Filters.scss";
 @import "./components/ProductsList/ProductsList.scss";
-
 @import "./components/ProductItem/ProductItem.scss";
 @import "./components/CategoriesList/CategoriesList.scss";
 @import "./components/CategoryItem/CategoryItem.scss";
-@import "./components/Filters/Filters.scss";
 @import 'nouislider/dist/nouislider.css';
 
 
@@ -102,41 +102,14 @@ body {
 
   // main=======================================================================================================
 
-.main{
-  &__container{
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    flex-wrap: nowrap;
+  .main{
+    &__container{
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-wrap: nowrap;
+    }
 
   }
-  &__filters{
-    display: flex;
-    width: 20%;
-    flex-direction: column;
-    align-items: flex-end;
-    justify-content: space-between;
 
-  }
-  &__content{
-    display: flex;
-    width: 80%;
-    flex-direction:column;
-    align-items: center;
-    justify-content: flex-start;
-    
-  }
-}
-.filters-checkbox{
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-.filter{
-  display: flex;
-  flex-direction: column;
-  &__items{
-    display: flex;
-    flex-direction: column;
-  }
-}
+

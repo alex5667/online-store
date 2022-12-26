@@ -2,9 +2,6 @@ import { ProductModel } from '../models/product';
 import Products from '../../db/products';
 import ProductItem from '../ProductItem/ProductItem'
 import { SortFilter, STATE_FILTER, Filter } from '../../utils/filter';
-// import Filters from '../Filters/Filters';
-
-
 import './ProductsList';
 
 
@@ -14,10 +11,9 @@ export default class ProductsList {
   sectionElement: HTMLElement;
   element: HTMLElement;
 
-
   constructor() {
     this.products = Products;
-    this.sectionElement = document.querySelector('.main__content') as HTMLElement;
+    this.sectionElement = document.getElementById('main__content') as HTMLElement;
     this.templateItem = document.getElementById('products-list') as HTMLTemplateElement;
     const clonedNode = document.importNode(this.templateItem.content, true);
     this.element = clonedNode.firstElementChild as HTMLElement;
