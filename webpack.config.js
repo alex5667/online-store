@@ -59,8 +59,8 @@ const baseConfig = {
                     to: path.resolve(__dirname, 'dist/components/img')
                 },
                 {
-                    from: path.resolve(__dirname, 'src/pages/details.html'),
-                    to: path.resolve(__dirname, 'dist/pages/details.html')
+                    from: path.resolve(__dirname, 'src/pages/'),
+                    to: path.resolve(__dirname, 'dist/pages/')
                 }
             ],
         }),
