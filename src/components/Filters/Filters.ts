@@ -50,7 +50,7 @@ export default class Filters {
       search: '',
     };
     localStorage.removeItem('Filter');
-    const filters = document.querySelectorAll('.filter__items') as NodeListOf<HTMLElement>
+    const filters = document.querySelectorAll('.filter__items') as NodeListOf<HTMLElement>;
     filters.forEach((filter: HTMLElement) => {
       while (filter.hasChildNodes()) {
         filter.removeChild(filter.children[0]);
