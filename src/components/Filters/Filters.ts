@@ -7,6 +7,8 @@ import { categories, brands, prices, quantities } from '../../db/productsPropert
 import CheckboxItem from '../Filters/Checkbox/CheckboxItem';
 import ProductsList from '../ProductsList/ProductsList';
 import Products from '../../db/products';
+// import Route from '../app/route';
+
 
 
 
@@ -18,14 +20,16 @@ export default class Filters {
   state: Filter;
   productsList: ProductsList;
   productsForFilter: ProductModel[];
-  // route:Route;
+    // route:Route
+
 
   constructor(productsList: ProductsList) {
     const filter: string | null = localStorage.getItem('Filter');
     this.state = filter ? JSON.parse(filter) : STATE_FILTER;
     this.productsList = productsList;
     this.productsForFilter = Products;
-    // this.route=new Route()
+        // this.route= new Route();
+
   }
   render(): void {
     this.checkboxFilters();
@@ -36,7 +40,6 @@ export default class Filters {
     this.resetFilter();
     this.setAmountProducts();
     this.changeView();
-    // this.route= new Route();
 
   }
   resetFilter(): void {

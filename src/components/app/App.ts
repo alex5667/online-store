@@ -6,22 +6,21 @@ import Filters from '../Filters/Filters';
 
 
 export default class App {
-  mainFilters:MainFilters;
-  mainContent:MainContent;
+  mainFilters: MainFilters;
+  mainContent: MainContent;
   productsList: ProductsList;
-  filters:Filters;
+  filters: Filters;
   // route:Route
   constructor() {
-    this.mainFilters= new MainFilters();
-    this.mainContent=new MainContent();
+    this.mainFilters = new MainFilters();
+    this.mainContent = new MainContent();
 
-    this.productsList= new ProductsList();
-    this.filters= new Filters(this.productsList);
+    this.productsList = new ProductsList();
+    this.filters = new Filters(this.productsList);
     // this.route= new Route();
-
+    this.render()
   }
-  start() {
-
+  render() {
     this.filters.render();
   }
 
