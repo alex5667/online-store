@@ -2,18 +2,18 @@ import App from "./App";
 export interface Routes {
   '404': string;
   '/': string;
-  '/pages/details.html': string;
+  '/pages/details/details.html': string;
 }
 export default class Route {
-  app:App;
+  app: App;
   routes: Routes = {
     '404': "/pages/404.html",
     '/': "/index.html",
-    '/pages/details.html': "/pages/details.html",
+    '/pages/details/details.html': "/pages/details/details.html",
   };
   constructor() {
     this.start();
-    this.app=new App();
+    this.app = new App();
 
   }
 
@@ -43,37 +43,23 @@ export default class Route {
     const path = window.location.pathname as keyof Routes;
     const mainContainer = document.getElementById('main__container') as HTMLElement;
     mainContainer.innerHTML = '';
-
-    if(path==='/'){
-      this.app=new App();
-    }else{
+    if (path === '/') {
+      this.app = new App();
+    } else {
       const route = this.routes[path] || this.routes[404];
       const html = await fetch(route).then((data) => data.text());
-      const mainContainer = document.getElementById('main__container') as HTMLElement;
       mainContainer.innerHTML = html;
-
     }
-
-
+    console.log(window.location.pathname)
   }
 
   popState(): void {
-    window.addEventListener('popstate',()=> this.handleLocation());
+    window.addEventListener('popstate', () => this.handleLocation());
   }
 
-  domLocation() {
-    console.log(window.location.pathname)
-    // const mainContainer = document.getElementById('main__container') as HTMLElement;
-    // console.log(mainContainer)
-    // this.enableRouteChange()
 
-
-    // mainContainer.innerHTML = html;
-
-    // console.log(route)
-  }
   domContentLoaded(): void {
-    window.addEventListener('DOMContentLoaded', ()=> this.handleLocation());
+    window.addEventListener('DOMContentLoaded', () => this.handleLocation());
   }
 
   // private enableRouteChange() {

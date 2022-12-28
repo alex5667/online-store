@@ -35,7 +35,7 @@ export default class ProductItem{
     const discountEL = this.element.querySelector('.product__discount') as HTMLParagraphElement;
     const priceEl = this.element.querySelector('.product__price') as HTMLParagraphElement;
     // const addToCartBtn = this.element.querySelector('.link-button link-button-add-to-cart') as HTMLButtonElement;
-    // const details = this.element.querySelector('.link-link-button-details') as HTMLButtonElement;
+    const details = this.element.querySelector('.link-link-button-details') as HTMLAnchorElement;
 
     const {thumbnail,title,category,brand,stock,rating,discountPercentage,price}:ProductModel=this.product;
     image.src = thumbnail;
@@ -46,6 +46,7 @@ export default class ProductItem{
     ratingEl.innerText =`Rating: ${rating}`;
     discountEL.innerText =`Discount: ${discountPercentage}`;
     priceEl.innerText =`Price: ${price}`;
+    details.setAttribute=`${this.product.id}`
   }
 
 
