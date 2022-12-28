@@ -7,6 +7,7 @@ export default class ProductItem{
   templateItem: HTMLTemplateElement;
   sectionElement:HTMLElement;
   element:HTMLElement;
+
   constructor(
     ElementSelector: string,
     product: ProductModel,
@@ -24,8 +25,6 @@ export default class ProductItem{
 
 
   render(): void{
-
-
     const image = this.element.querySelector('.product__img img') as HTMLImageElement;
     const titleEl = this.element.querySelector('.product__title') as HTMLHeadingElement;
     const categoryEL = this.element.querySelector('.product__category') as HTMLParagraphElement;
@@ -34,10 +33,10 @@ export default class ProductItem{
     const ratingEl = this.element.querySelector('.product__rating') as HTMLParagraphElement;
     const discountEL = this.element.querySelector('.product__discount') as HTMLParagraphElement;
     const priceEl = this.element.querySelector('.product__price') as HTMLParagraphElement;
-    // const addToCartBtn = this.element.querySelector('.link-button link-button-add-to-cart') as HTMLButtonElement;
-    const details = this.element.querySelector('.link-link-button-details') as HTMLAnchorElement;
+    // const addToCartBtn = this.element.querySelector('.link-button-add-to-cart') as HTMLButtonElement;
+    const details = this.element.querySelector('.link-button-details') as HTMLAnchorElement;
 
-    const {thumbnail,title,category,brand,stock,rating,discountPercentage,price}:ProductModel=this.product;
+    const {thumbnail,title,category,brand,stock,rating,discountPercentage,price,id}:ProductModel=this.product;
     image.src = thumbnail;
     titleEl.innerText =`${title}`;
     categoryEL.innerText =`Category: ${category}`;
@@ -46,7 +45,7 @@ export default class ProductItem{
     ratingEl.innerText =`Rating: ${rating}`;
     discountEL.innerText =`Discount: ${discountPercentage}`;
     priceEl.innerText =`Price: ${price}`;
-    details.setAttribute=`${this.product.id}`
+    if(details) details.id=String(id);
   }
 
 

@@ -1,17 +1,26 @@
 import App from "./App";
-export interface Routes {
-  '404': string;
-  '/': string;
-  '/pages/details/details.html': string;
-}
+import  {ProductModel}  from '../models/product';
+import Products from '../../db/products';
+import ProductDetails from '../../pages/details/ProductDetails' 
+
+
+
+
+// export interface Routes {
+//   '404': string;
+//   '/': string;
+//   '/pages/details/details.html': string;
+// }
 export default class Route {
+  products: ProductModel[];
   app: App;
-  routes: Routes = {
-    '404': "/pages/404.html",
-    '/': "/index.html",
-    '/pages/details/details.html': "/pages/details/details.html",
-  };
+  // routes: Routes = {
+  //   '404': "/pages/404.html",
+  //   '/': "/index.html",
+  //   '/pages/details/details.html': "/pages/details/details.html",
+  // };
   constructor() {
+    this.products = Products;
     this.start();
     this.app = new App();
 
@@ -32,25 +41,42 @@ export default class Route {
     event = event || window.event;
     event.preventDefault();
     const target = event.target as HTMLAnchorElement;
-    window.history.pushState({}, "", target.href);
-    this.handleLocation();
-    // this.enableRouteChange();
+    const targetHref=`${target.href}/${target.id}`
+    console.log(targetHref)
+    window.history.pushState({}, "", targetHref);
+    localStorage.setItem('id', JSON.stringify(target.id));
+    this.handleLocation(target.id);
+    // this.getProduct(target.id);
   }
 
+  // getProduct(id:string){
+  //   const product: ProductModel = this.products.filter((product)=> product.id===+id).shift() as ProductModel;
+  //   return product
+  // }
 
 
-  handleLocation = async () => {
-    const path = window.location.pathname as keyof Routes;
+
+  handleLocation = async (id?:string) => {
+    const path = window.location.pathname;
+    console.log(window.location.pathname)
     const mainContainer = document.getElementById('main__container') as HTMLElement;
     mainContainer.innerHTML = '';
     if (path === '/') {
       this.app = new App();
-    } else {
-      const route = this.routes[path] || this.routes[404];
-      const html = await fetch(route).then((data) => data.text());
-      mainContainer.innerHTML = html;
+    } else if(path.includes('/details')) {
+      if (id){
+        const product: ProductModel = this.products.filter((product)=> product.id===+id).shift() as ProductModel;
+        new ProductDetails(product);
+      }else if(localStorage.getItem('id')!== null){
+        const localId= localStorage.getItem('id') as string;
+        const idProduct= JSON.parse(localId);
+        new ProductDetails(idProduct);
+      }
+
+
+
+      
     }
-    console.log(window.location.pathname)
   }
 
   popState(): void {
