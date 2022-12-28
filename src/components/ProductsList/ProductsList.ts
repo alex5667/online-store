@@ -2,7 +2,7 @@ import { ProductModel } from '../models/product';
 import Products from '../../db/products';
 import ProductItem from '../ProductItem/ProductItem'
 import { SortFilter, STATE_FILTER, Filter } from '../../utils/filter';
-import './ProductsList';
+import './ProductsList.scss';
 
 
 export default class ProductsList {

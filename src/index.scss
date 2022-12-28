@@ -79,23 +79,23 @@ body {
   // header=====================================================
   .header {
 
-		// .header__container
+    // .header__container
 
-		&__container {
+    &__container {
       display: flex;
       align-items: center;
       justify-content: space-between;
-		}
+    }
 
-		// .header__logo
+    // .header__logo
 
-		&__logo {
-		}
+    &__logo {
+    }
 
-		// .header__total-price
+    // .header__total-price
 
-		&__total-price {
-		}
+    &__total-price {
+    }
 }
 .cart {
 }
