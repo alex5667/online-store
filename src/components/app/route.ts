@@ -1,7 +1,7 @@
 import App from "./App";
-import  {ProductModel}  from '../models/product';
+import { ProductModel } from '../models/product';
 import Products from '../../db/products';
-import ProductDetails from '../../pages/details/ProductDetails' 
+import ProductDetails from '../../pages/details/ProductDetails'
 import Page404 from "../../pages/404/404";
 
 
@@ -26,10 +26,8 @@ export default class Route {
     const details = document.querySelectorAll('.link-button-details') as NodeListOf<HTMLAnchorElement>;
     details.forEach((detail) => detail.addEventListener('click', (e: Event) => this.route(e))
     )
-
-
-    
-
+    this.enableRouteChange();
+    // this.domContentLoaded();
   }
 
 
@@ -37,46 +35,41 @@ export default class Route {
     event = event || window.event;
     event.preventDefault();
     const target = event.target as HTMLAnchorElement;
-    const targetHref=`${target.href}/${target.id}`
-    console.log(targetHref)
-    window.history.pushState({}, "",targetHref);
+    const targetHref = `${target.href}/${target.id}`
+    window.history.pushState({}, "", targetHref);
     localStorage.setItem('id', JSON.stringify(target.id));
+    const path = window.location.pathname;
+    localStorage.setItem('path', JSON.stringify(path));
     this.handleLocation(target.id);
+    this.popState();
+    this.domContentLoaded();
   }
 
 
 
-  handleLocation = async (id?:string) => {
-    const path = window.location.pathname;
-    console.log(window.history)
-
-    const localId= localStorage.getItem('id') as string;
-    const localIdProduct= JSON.parse(localId);
-    const idProduct =id?id:localIdProduct;
+  handleLocation = async (id?: string) => {
+    const localPath = localStorage.getItem('path') as string;
+    const localIdPath = JSON.parse(localPath);
+    console.log(localIdPath)
+    const path = window.location.pathname?window.location.pathname:localIdPath;
+    console.log(path)
+    const localId = localStorage.getItem('id') as string;
+    const localIdProduct = JSON.parse(localId);
+    const idProduct = id ? id : localIdProduct;
     const mainContainer = document.getElementById('main__container') as HTMLElement;
     mainContainer.innerHTML = '';
-    if (path === '/') {
+    if (path === '/' || path.includes('index')) {
       this.app = new App();
-    } else if(path.includes('/details')) {
-      if (idProduct){
-        const product: ProductModel = this.products.filter((product)=> product.id===+idProduct).shift() as ProductModel;
+    } else if (path.includes('/details')) {
+      if (idProduct) {
+        const product: ProductModel = this.products.filter((product) => product.id === +idProduct).shift() as ProductModel;
         new ProductDetails(product);
       }
-      else{
-        this.app = new App();
-      }
-      // else if(localStorage.getItem('id')!== null){
-      //   // const localId= localStorage.getItem('id') as string;
-      //   // const idProduct= JSON.parse(localId);
-      //   const product: ProductModel = this.products.filter((product)=> product.id===+idProduct).shift() as ProductModel;
-      //   new ProductDetails(product);
-      // }
-    } else{
+    } else {
       new Page404();
     }
     this.popState();
     this.domContentLoaded();
-    this.enableRouteChange();
   }
 
   popState(): void {
