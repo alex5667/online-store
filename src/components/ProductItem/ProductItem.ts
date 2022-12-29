@@ -56,7 +56,8 @@ export default class ProductItem{
     discountEL.innerText =`Discount: ${discountPercentage}`;
     priceEl.innerText =`Price: ${price}`;
     if(details) details.id=String(id);
-    addToCartBtn.addEventListener('click', this.productCart.addToCart)
+    addToCartBtn.addEventListener('click',(e:Event)=> {
+    this.productCart.addToCart(e)})
 
     if (this.isInCart) {
       this.element.classList.add('product--in-cart');

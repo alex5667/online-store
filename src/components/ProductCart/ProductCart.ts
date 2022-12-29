@@ -15,19 +15,21 @@ export default class ProductCart {
     counter.classList.add('cart-counter');
     this.counterEl = counter;
     this.cartEl.append(counter);
-    this.updateCounter();
+
   }
 
   public addToCart(e: Event): void {
     let target = e.target as HTMLElement;
+
     while (!target.id) {
       target = target.parentElement as HTMLElement;
     }
-    if (target.classList.contains('product--not-in-stock')) return;
-    if (!this.state.includes(target.id)) return;
-    const addToCartBtn = target.querySelector('.link-button--add-to-cart') as HTMLButtonElement;
+    console.log(target)
+    const addToCartBtn = target.querySelector('.link-button-add-to-cart') as HTMLButtonElement;
     if (!this.state.includes(target.id)) {
       this.state = [...this.state, target.id];
+      console.log(this.state)
+      localStorage.setItem('productCart', JSON.stringify(this.state));
       target.classList.add('product--in-cart');
       addToCartBtn.innerText = 'Remove';
     } else {
@@ -35,19 +37,17 @@ export default class ProductCart {
       target.classList.remove('product--in-cart');
       addToCartBtn.innerText = 'Add to cart';
     }
+    this.updateCounter();
   }
-
-
-
 
 
   private updateCounter(): void {
     if (this.state.length > 0) {
-      this.counterEl.innerText = `${this.state.length}`;
+      this.counterEl.innerHTML = `${this.state.length}`;
       this.counterEl.style.display = 'block';
     } else {
-      this.counterEl.innerText = '';
-      this.counterEl.style.display = 'none';
+      this.counterEl.innerHTML = '0';
+      // this.counterEl.style.display = 'none';
     }
   }
 
