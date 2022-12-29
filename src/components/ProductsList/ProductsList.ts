@@ -3,6 +3,7 @@ import Products from '../../db/products';
 import ProductItem from '../ProductItem/ProductItem'
 import { SortFilter, STATE_FILTER, Filter } from '../../utils/filter';
 import './ProductsList.scss';
+import ProductCart from '../ProductCart/ProductCart';
 
 
 export default class ProductsList {
@@ -10,9 +11,11 @@ export default class ProductsList {
   templateItem: HTMLTemplateElement;
   sectionElement: HTMLElement;
   element: HTMLElement;
+  productCart: ProductCart;
 
-  constructor() {
+  constructor(cart: ProductCart) {
     this.products = Products;
+    this.productCart = cart;
     this.sectionElement = document.getElementById('main__content') as HTMLElement;
     this.templateItem = document.getElementById('products-list') as HTMLTemplateElement;
     const clonedNode = document.importNode(this.templateItem.content, true);
@@ -27,7 +30,8 @@ export default class ProductsList {
 
     this.element.innerHTML = '';
     if (this.products.length > 0) {
-      this.products.forEach((product) => new ProductItem('.products', product));
+      this.products.forEach((product) => new ProductItem('.products', product, this.productCart.state.includes(String(product.id)),
+      ));
     }
 
   }
