@@ -15,7 +15,6 @@ export default class ProductCart {
     counter.classList.add('cart-counter');
     this.counterEl = counter;
     this.cartEl.append(counter);
-
   }
 
   public addToCart(e: Event): void {
@@ -24,14 +23,17 @@ export default class ProductCart {
     while (!target.id) {
       target = target.parentElement as HTMLElement;
     }
-    console.log(target)
+    console.log(target.id)
     const addToCartBtn = target.querySelector('.link-button-add-to-cart') as HTMLButtonElement;
     if (!this.state.includes(target.id)) {
+
       this.state = [...this.state, target.id];
       console.log(this.state)
+
       localStorage.setItem('productCart', JSON.stringify(this.state));
       target.classList.add('product--in-cart');
       addToCartBtn.innerText = 'Remove';
+
     } else {
       this.state = this.state.filter((id) => id !== target.id);
       target.classList.remove('product--in-cart');
@@ -42,11 +44,12 @@ export default class ProductCart {
 
 
   private updateCounter(): void {
+    this.counterEl.innerHTML='';
     if (this.state.length > 0) {
       this.counterEl.innerHTML = `${this.state.length}`;
       this.counterEl.style.display = 'block';
     } else {
-      this.counterEl.innerHTML = '0';
+      this.counterEl.innerHTML = '';
       // this.counterEl.style.display = 'none';
     }
   }

@@ -1,5 +1,7 @@
 import  {ProductModel}  from '../models/product';
-import ProductCart from '../ProductCart/ProductCart';
+
+
+export type EventListener = [string, (e: Event) => void];
 
 
 
@@ -9,14 +11,19 @@ export default class ProductItem{
   sectionElement:HTMLElement;
   element:HTMLElement;
   isInCart: boolean;
-  productCart:ProductCart;
+  listeners: EventListener[]
+
 
   constructor(
     ElementSelector: string,
     product: ProductModel,
     isInCart: boolean,
+    listeners: EventListener[],
+
   ){
     this.product = product;
+    this.listeners = listeners;
+
     this.sectionElement = document.querySelector(ElementSelector) as HTMLElement;
     this.templateItem = document.getElementById('product-item') as HTMLTemplateElement;
     const clonedNode = document.importNode(this.templateItem.content, true);
@@ -24,7 +31,6 @@ export default class ProductItem{
     this.element.id=String(product.id);
     this.sectionElement.insertAdjacentElement('afterbegin', this.element);
     this.isInCart = isInCart;
-    this.productCart= new ProductCart();
 
 
 
@@ -56,16 +62,19 @@ export default class ProductItem{
     discountEL.innerText =`Discount: ${discountPercentage}`;
     priceEl.innerText =`Price: ${price}`;
     if(details) details.id=String(id);
-    addToCartBtn.addEventListener('click',(e:Event)=> {
-    this.productCart.addToCart(e)})
+
 
     if (this.isInCart) {
       this.element.classList.add('product--in-cart');
       addToCartBtn.innerText = 'Remove';
     }
+    this.useListeners(addToCartBtn);
+
   }
 
-  
+  useListeners(Btn:HTMLButtonElement){
+    this.listeners.forEach((listener) => Btn.addEventListener(listener[0], listener[1]));
+  }
 
 
 

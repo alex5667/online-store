@@ -3,6 +3,9 @@ import { ProductModel } from '../models/product';
 import Products from '../../db/products';
 import ProductDetails from '../../pages/details/ProductDetails'
 import Page404 from "../../pages/404/404";
+import ProductCart from '../ProductCart/ProductCart';
+import { EventListener } from '../ProductItem/ProductItem';
+
 
 
 
@@ -14,12 +17,14 @@ import Page404 from "../../pages/404/404";
 export default class Route {
   products: ProductModel[];
   app: App;
+  productCart: ProductCart;
+  addToCartListener: EventListener;
   constructor() {
     this.products = Products;
+    this.productCart=new ProductCart();
+    this.addToCartListener= ['click', this.productCart.addToCart.bind(this.productCart)];
     this.start();
-    this.app = new App();
-
-
+    this.app = new App(this.productCart,[this.addToCartListener]);
   }
 
   start(): void {
@@ -59,11 +64,11 @@ export default class Route {
     const mainContainer = document.getElementById('main__container') as HTMLElement;
     mainContainer.innerHTML = '';
     if (path === '/' || path.includes('index')) {
-      this.app = new App();
+      this.app = new App(this.productCart,[this.addToCartListener]);
     } else if (path.includes('/details')) {
       if (idProduct) {
         const product: ProductModel = this.products.filter((product) => product.id === +idProduct).shift() as ProductModel;
-        new ProductDetails(product);
+        new ProductDetails(product,[this.addToCartListener]);
       }
     } else {
       new Page404();

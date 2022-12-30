@@ -1,10 +1,10 @@
-import ProductItem from '../../components/ProductItem/ProductItem';
+import ProductItem,{ EventListener } from '../../components/ProductItem/ProductItem';
 import { ProductModel } from '../../components/models/product';
 
 
 class ProductDetails extends ProductItem {
-  constructor(product: ProductModel,) {
-    super('.main__container', product,false)
+  constructor(product: ProductModel,addToCartListener:EventListener[]) {
+    super('.main__container', product,true,addToCartListener)
     // this.render();
   }
   render(): void {
@@ -19,7 +19,6 @@ class ProductDetails extends ProductItem {
     descriptionsEL.innerText = `Description:${description}`;
     productDescription.insertAdjacentElement('afterbegin', descriptionsEL);
   }
-
 }
 
 

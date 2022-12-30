@@ -3,22 +3,24 @@ import MainContent from '../view/MainContent';
 import ProductsList from '../ProductsList/ProductsList';
 import Filters from '../Filters/Filters';
 import ProductCart from '../ProductCart/ProductCart';
+import { EventListener } from '../ProductItem/ProductItem';
+
 // import Route from './route';
 
 
 export default class App {
-  productCart:ProductCart;
+  // productCart:ProductCart;
   mainFilters: MainFilters;
   mainContent: MainContent;
   productsList: ProductsList;
   filters: Filters;
   // route:Route
-  constructor() {
+  constructor(productCart:ProductCart,addToCartListener:EventListener[]) {
     this.mainFilters = new MainFilters();
     this.mainContent = new MainContent();
-    this.productCart=new ProductCart();
+    // this.productCart=new ProductCart();
 
-    this.productsList = new ProductsList(this.productCart);
+    this.productsList = new ProductsList(productCart,addToCartListener);
 
 
     this.filters = new Filters(this.productsList);
