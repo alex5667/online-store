@@ -18,8 +18,8 @@ export default class Route {
     this.products = Products;
     this.productCart=new ProductCart();
     this.addToCartListener= ['click', this.productCart.addToCart.bind(this.productCart)];
-    this.start();
     this.app = new App(this.productCart,[this.addToCartListener]);
+    this.start();
   }
 
   start(): void {
@@ -27,7 +27,6 @@ export default class Route {
     details.forEach((detail) => detail.addEventListener('click', (e: Event) => this.route(e))
     )
     this.enableRouteChange();
-    // this.domContentLoaded();
   }
 
 
@@ -35,14 +34,18 @@ export default class Route {
     event = event || window.event;
     event.preventDefault();
     const target = event.target as HTMLAnchorElement;
+    console.log(event.target)
+
     const targetHref = `${target.href}/${target.id}`
-    window.history.pushState({}, "", targetHref);
+    // const targetId=target.id;
+    window.history.pushState({id: targetHref}, "", targetHref);
     localStorage.setItem('id', JSON.stringify(target.id));
     const path = window.location.pathname;
     localStorage.setItem('path', JSON.stringify(path));
     this.handleLocation(target.id);
-    this.popState();
-    this.domContentLoaded();
+    console.log(history.state)
+    console.log(location.hash)
+
   }
 
 
@@ -50,9 +53,7 @@ export default class Route {
   handleLocation = async (id?: string) => {
     const localPath = localStorage.getItem('path') as string;
     const localIdPath = JSON.parse(localPath);
-    console.log(localIdPath)
     const path = window.location.pathname?window.location.pathname:localIdPath;
-    console.log(path)
     const localId = localStorage.getItem('id') as string;
     const localIdProduct = JSON.parse(localId);
     const idProduct = id ? id : localIdProduct;
@@ -69,21 +70,35 @@ export default class Route {
       new Page404();
     }
     this.popState();
-    this.domContentLoaded();
+
+    // this.domContentLoaded();
   }
 
   popState(): void {
-    window.addEventListener('popstate', () => this.handleLocation());
+    window.addEventListener('popstate', (e:Event) =>{
+      console.log(e)
+
+
+      console.log(window.location.pathname)
+      console.log(window.history.state)
+
+      // this.route(e)
+      this.handleLocation()
+    });
   }
 
 
 
   domContentLoaded(): void {
-    window.addEventListener('DOMContentLoaded', () => this.handleLocation());
+    window.addEventListener('DOMContentLoaded', (e:Event) =>{
+      console.log(e.target)
+
+      console.log(window.history.state)
+
+      console.log(window.location.pathname)
+       this.handleLocation()});
   }
-  // domContentLoaded(): void {
-  //   window.addEventListener('DOMContentLoaded', () => this.handleLocation());
-  // }
+
 
   private enableRouteChange() {
     window.addEventListener('hashchange', () => {
