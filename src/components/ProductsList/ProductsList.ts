@@ -2,8 +2,8 @@ import { ProductModel } from '../models/product';
 import Products from '../../db/products';
 import ProductItem, { EventListener } from '../ProductItem/ProductItem'
 import { SortFilter, STATE_FILTER, Filter } from '../../utils/filter';
-import './ProductsList.scss';
 import ProductCart from '../ProductCart/ProductCart';
+import './ProductsList.scss';
 
 
 export default class ProductsList {

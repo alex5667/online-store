@@ -14,6 +14,7 @@ export default class ProductCart {
     const counter = document.createElement('div');
     counter.classList.add('cart-counter');
     this.counterEl = counter;
+    this.counterEl.innerHTML=`${this.state.length}`;
     this.cartEl.append(counter);
   }
 
@@ -47,9 +48,9 @@ export default class ProductCart {
     this.counterEl.innerHTML='';
     if (this.state.length > 0) {
       this.counterEl.innerHTML = `${this.state.length}`;
-      this.counterEl.style.display = 'block';
+      // this.counterEl.style.display = 'block';
     } else {
-      this.counterEl.innerHTML = '';
+      this.counterEl.innerHTML = `${this.state.length}`;
       // this.counterEl.style.display = 'none';
     }
   }

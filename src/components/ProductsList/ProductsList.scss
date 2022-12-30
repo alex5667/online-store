@@ -1,3 +1,6 @@
+@use "sass:math";
+@import "../../scss/base/mixins.scss";
+
 
 .products{
   display: flex;

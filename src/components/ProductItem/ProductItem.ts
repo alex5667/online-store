@@ -1,4 +1,5 @@
 import  {ProductModel}  from '../models/product';
+import './ProductItem.scss'
 
 
 export type EventListener = [string, (e: Event) => void];
