@@ -24,7 +24,6 @@ export default class ProductCart {
     while (!target.id) {
       target = target.parentElement as HTMLElement;
     }
-    console.log(target.id)
     const addToCartBtn = target.querySelector('.link-button-add-to-cart') as HTMLButtonElement;
     if (!this.state.includes(target.id)) {
 

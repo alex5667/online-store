@@ -19,14 +19,17 @@ export default class Route {
     this.productCart=new ProductCart();
     this.addToCartListener= ['click', this.productCart.addToCart.bind(this.productCart)];
     this.app = new App(this.productCart,[this.addToCartListener]);
+    window.history.replaceState({id: ''}, '', '');
+    console.log(window.history.state)
     this.start();
   }
 
   start(): void {
     const details = document.querySelectorAll('.link-button-details') as NodeListOf<HTMLAnchorElement>;
     details.forEach((detail) => detail.addEventListener('click', (e: Event) => this.route(e))
-    )
-    this.enableRouteChange();
+    );
+  
+
   }
 
 
@@ -34,23 +37,20 @@ export default class Route {
     event = event || window.event;
     event.preventDefault();
     const target = event.target as HTMLAnchorElement;
-    console.log(event.target)
 
     const targetHref = `${target.href}/${target.id}`
-    // const targetId=target.id;
     window.history.pushState({id: targetHref}, "", targetHref);
     localStorage.setItem('id', JSON.stringify(target.id));
     const path = window.location.pathname;
     localStorage.setItem('path', JSON.stringify(path));
     this.handleLocation(target.id);
-    console.log(history.state)
-    console.log(location.hash)
-
   }
 
 
 
   handleLocation = async (id?: string) => {
+    console.log(window.history.state)
+    console.log(window.location.search)
     const localPath = localStorage.getItem('path') as string;
     const localIdPath = JSON.parse(localPath);
     const path = window.location.pathname?window.location.pathname:localIdPath;
@@ -77,10 +77,10 @@ export default class Route {
   popState(): void {
     window.addEventListener('popstate', (e:Event) =>{
       console.log(e)
-
-
       console.log(window.location.pathname)
       console.log(window.history.state)
+      console.log(window.location.search)
+
 
       // this.route(e)
       this.handleLocation()
@@ -100,15 +100,15 @@ export default class Route {
   }
 
 
-  private enableRouteChange() {
-    window.addEventListener('hashchange', () => {
-      const hash = window.location.hash;
-      console.log('The hash has changed!')
+  // private enableRouteChange() {
+  //   window.addEventListener('hashchange', () => {
+  //     const hash = window.location.hash;
+  //     console.log('The hash has changed!')
 
-      console.log(hash)
-      // App.renderNewPage(hash);
-    });
-  }
+  //     console.log(hash)
+  //     // App.renderNewPage(hash);
+  //   });
+  // }
 
 
 }
