@@ -92,7 +92,9 @@ export default class Route {
   }
 
 
+
   
+
   interval(): void {
     if (this.current === this.getFragment()) return;
     this.current = this.getFragment();
