@@ -5,5 +5,5 @@ import './index.scss';
 
 
 const route =new Route();
-route.start();
+route.listen();
 

@@ -1,63 +1,70 @@
 import App from "./App";
 import { ProductModel } from '../models/product';
 import Products from '../../db/products';
-// import ProductDetails from '../../pages/details/ProductDetails'
+import ProductDetails from '../../pages/details/ProductDetails'
 // import Page404 from "../../pages/Page404/Page404";
 import ProductCart from '../ProductCart/ProductCart';
 import { EventListener } from '../ProductItem/ProductItem';
 
+export type Callback = <T>(data?: T) => void;
 
 export interface Rout {
-  path: string,
-  cb: (id?:string) => void,
+  path: RegExp,
+  cb: (id?: string) => void,
 }
 
 export default class Route {
   products: ProductModel[];
-  app: App;
+  // app: App;
   productCart: ProductCart;
   addToCartListener: EventListener;
   routes: Rout[];
-  mode:string;
+  mode: string;
   root: string;
   current: string;
+  mainContainer: HTMLElement;
   constructor() {
     this.products = Products;
     this.productCart = new ProductCart();
     this.addToCartListener = ['click', this.productCart.addToCart.bind(this.productCart)];
-    this.app = new App(this.productCart, [this.addToCartListener]);
-    // window.history.replaceState({id: ''}, '', '');
+    new App(this.productCart, [this.addToCartListener]);
+    this.mainContainer = document.getElementById('main__container') as HTMLElement;
     this.routes = [
       {
-        path: '/about/',
+        path: /about/,
         cb: () => {
           console.log('welcome in about page');
         },
       },
       {
-        path: '/product-details/(.*)',
+        path: /product-details\/(.*)/,
         cb: (id) => {
-          console.log(`products: ${id}`);
+          if (id) {
+            this.mainContainer.innerHTML = '';
+            const product: ProductModel = this.products.filter((product) => product.id === +id).shift() as ProductModel;
+            new ProductDetails(product, [this.addToCartListener]);
+          }
+
         },
       },
       {
-        path: '',
+        path: /^\s*$/,
         cb: () => {
-          // general controller
-          console.log('welcome in catch all controller');
+          this.mainContainer.innerHTML = '';
+          new App(this.productCart,[this.addToCartListener]);
         },
       },
     ];
     this.mode = 'hash';
     this.root = '/';
-    this.current= '';
-
-    // this.start();
+    this.current = '';
   }
 
 
 
-  clearSlashes(path:string) {
+
+
+  clearSlashes(path: string) {
     return path.toString()
       .replace(/\/$/, '')
       .replace(/^\//, '');
@@ -76,24 +83,23 @@ export default class Route {
     return this.clearSlashes(fragment);
   }
 
-  listen():void {
-    let inter = this.interval.bind(this) ;
-    clearInterval(inter);
-
-    inter = setInterval(inter, 100);
+  listen(): void {
+    const inter: Callback = this.interval.bind(this) as Callback;
+    let handle: ReturnType<typeof setInterval> | number = 0;
+    clearInterval(handle);
+    handle = setInterval(inter as Callback, 100);
+    this.enableRouteChange();
   }
 
-  interval() {
-    
+  interval(): void {
     if (this.current === this.getFragment()) return;
     this.current = this.getFragment();
     this.routes.some((route) => {
-      const match:string[]= this.current.match(route.path) as string[];
-      // const argCb=
+      const match = this.current.match(route.path);
       if (match) {
-        
+
         match.shift();
-        
+
         route.cb.call({}, ...match);
         return match;
       }
@@ -189,15 +195,15 @@ export default class Route {
   // }
 
 
-  // private enableRouteChange() {
-  //   window.addEventListener('hashchange', () => {
-  //     const hash = window.location.hash;
-  //     console.log('The hash has changed!')
+  private enableRouteChange() {
+    window.addEventListener('hashchange', () => {
+      const hash = window.location.hash;
+      console.log('The hash has changed!')
 
-  //     console.log(hash)
-  //     // App.renderNewPage(hash);
-  //   });
-  // }
+      console.log(hash)
+      // App.renderNewPage(hash);
+    });
+  }
 
 
 }

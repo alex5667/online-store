@@ -15,10 +15,7 @@ export default class App {
   constructor(productCart:ProductCart,addToCartListener:EventListener[]) {
     this.mainFilters = new MainFilters();
     this.mainContent = new MainContent();
-
     this.productsList = new ProductsList(productCart,addToCartListener);
-
-
     this.filters = new Filters(this.productsList);
     this.render()
   }
