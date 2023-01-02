@@ -98,9 +98,7 @@ export default class Route {
     this.routes.some((route) => {
       const match = this.current.match(route.path);
       if (match) {
-
         match.shift();
-
         route.cb.call({}, ...match);
         return match;
       }
