@@ -1,0 +1,11 @@
+@use "sass:math";
+@import "../../scss/base/mixins.scss";
+
+.product {
+
+&.details{
+  width: rem(500);
+}
+
+  
+}
