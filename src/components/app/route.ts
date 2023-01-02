@@ -1,7 +1,7 @@
 import App from "./App";
 import { ProductModel } from '../models/product';
 import Products from '../../db/products';
-import ProductDetails from '../../pages/details/ProductDetails'
+import ProductDetails from '../../pages/ProductDetails/ProductDetails'
 // import Page404 from "../../pages/Page404/Page404";
 import ProductCart from '../ProductCart/ProductCart';
 import { EventListener } from '../ProductItem/ProductItem';
