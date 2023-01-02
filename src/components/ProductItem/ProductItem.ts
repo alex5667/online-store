@@ -62,8 +62,10 @@ export default class ProductItem{
     ratingEl.innerText =`Rating: ${rating}`;
     discountEL.innerText =`Discount: ${discountPercentage}`;
     priceEl.innerText =`Price: ${price}`;
-    if(details) details.id=String(id);
-
+    if(details) {
+      details.id=String(id);
+      details.href=`/#/product-details/${String(id)}`
+    }
 
     if (this.isInCart) {
       this.element.classList.add('product--in-cart');
