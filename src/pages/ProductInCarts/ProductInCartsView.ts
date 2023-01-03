@@ -32,7 +32,8 @@ render(): void {
   headerProductInCart.appendChild(headerPage);
   const contentProductInCart =document.createElement('div');
   contentProductInCart.classList.add('product-in-cart__content');
-  contentProductInCart.innerText=` products list`
+  contentProductInCart.id='product-in-cart__content';
+  contentProductInCart.innerText=` products list`;
   productInCart.appendChild(contentProductInCart);
   const summary = document.createElement('div');
   summary.classList.add('summary');

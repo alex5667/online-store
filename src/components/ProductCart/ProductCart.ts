@@ -28,7 +28,6 @@ export default class ProductCart {
     if (!this.state.includes(target.id)) {
 
       this.state = [...this.state, target.id];
-      console.log(this.state)
 
       localStorage.setItem('productCart', JSON.stringify(this.state));
       target.classList.add('product--in-cart');

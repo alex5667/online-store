@@ -14,13 +14,13 @@ export default class ProductsList {
   productCart: ProductCart;
   listeners: EventListener[];
 
-  constructor(cart: ProductCart,listeners: EventListener[] = [],
+  constructor(cart: ProductCart,listeners: EventListener[] = [],ElementSelector:string
     ) {
     this.products = Products;
     this.productCart = cart;
     this.listeners = listeners;
 
-    this.sectionElement = document.getElementById('main__content') as HTMLElement;
+    this.sectionElement = document.getElementById(ElementSelector) as HTMLElement;
     this.templateItem = document.getElementById('products-list') as HTMLTemplateElement;
     const clonedNode = document.importNode(this.templateItem.content, true);
     this.element = clonedNode.firstElementChild as HTMLElement;
