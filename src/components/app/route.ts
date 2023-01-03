@@ -5,6 +5,7 @@ import ProductDetails from '../../pages/ProductDetails/ProductDetails'
 // import Page404 from "../../pages/Page404/Page404";
 import ProductCart from '../ProductCart/ProductCart';
 import { EventListener } from '../ProductItem/ProductItem';
+import ProductInCarts from "../../pages/ProductInCarts/ProductInCarts";
 
 export type Callback = <T>(data?: T) => void;
 
@@ -31,9 +32,13 @@ export default class Route {
     this.mainContainer = document.getElementById('main__container') as HTMLElement;
     this.routes = [
       {
-        path: /about/,
+        path: /cart/,
         cb: () => {
+          this.mainContainer.innerHTML = '';
+
+          new ProductInCarts();
           console.log('welcome in about page');
+
         },
       },
       {
