@@ -34,32 +34,32 @@ class ProductInCartsView {
     inputLimit.min='0';
     headerLimit.appendChild(inputLimit);
     headerProductInCart.appendChild(headerLimit);
-    const headerPage = document.createElement('div');
+    const headerPage = document.createElement('div')as HTMLDivElement;
     headerPage.classList.add('header__page');
     headerPage.innerText = `Page:`;
     headerProductInCart.appendChild(headerPage);
-    const contentProductInCart = document.createElement('div');
+    const contentProductInCart = document.createElement('div')as HTMLDivElement;
     contentProductInCart.classList.add('product-in-cart__content');
     contentProductInCart.id = 'product-in-cart__content';
     productInCart.appendChild(contentProductInCart);
-    const summary = document.createElement('div');
+    const summary = document.createElement('div')as HTMLDivElement;
     summary.classList.add('summary');
     containerContent.appendChild(summary);
     const summaryH2 = document.createElement('h2');
     summaryH2.classList.add('summary__title');
     summaryH2.innerText = `Summary`;
     summary.appendChild(summaryH2);
-    const summaryProducts = document.createElement('div');
+    const summaryProducts = document.createElement('div')as HTMLDivElement;
     summaryProducts.classList.add('summary__products');
     summaryProducts.innerText = ` Products:`
     summary.appendChild(summaryProducts);
-    const summaryTotal = document.createElement('div');
+    const summaryTotal = document.createElement('div')as HTMLDivElement;
     summaryTotal.classList.add('summary__total');
     summaryTotal.innerText = ` Total:`
     summary.appendChild(summaryTotal);
-    const summaryPromo = document.createElement('div');
-    summaryTotal.classList.add('summary__promo');
-    summaryTotal.innerText = ` Promo:`
+    const summaryPromo = document.createElement('div')as HTMLDivElement;
+    summaryPromo.classList.add('summary__promo');
+    summaryPromo.innerText = ` Promo:`
     summary.appendChild(summaryPromo);
     const summaryButton = document.createElement('a');
     summaryButton.classList.add('summary__button');
@@ -67,6 +67,7 @@ class ProductInCartsView {
     summaryButton.href = '/#/buy';
     summary.appendChild(summaryButton);
   }
+
 
 
 

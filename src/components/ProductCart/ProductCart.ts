@@ -42,7 +42,7 @@ export default class ProductCart {
   }
 
 
-  private updateCounter(): void {
+   private updateCounter(): void {
     this.counterEl.innerHTML='';
     if (this.state.length > 0) {
       this.counterEl.innerHTML = `${this.state.length}`;
