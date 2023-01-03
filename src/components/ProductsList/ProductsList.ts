@@ -19,7 +19,6 @@ export default class ProductsList {
     this.products = Products;
     this.productCart = cart;
     this.listeners = listeners;
-
     this.sectionElement = document.getElementById(ElementSelector) as HTMLElement;
     this.templateItem = document.getElementById('products-list') as HTMLTemplateElement;
     const clonedNode = document.importNode(this.templateItem.content, true);
@@ -27,11 +26,9 @@ export default class ProductsList {
     this.sectionElement.insertAdjacentElement('beforeend', this.element);
     const filterState: string | null = localStorage.getItem('Filter');
     this.useFilter(filterState ? JSON.parse(filterState) : STATE_FILTER);
-
   }
 
   render(): void {
-
     this.element.innerHTML = '';
     if (this.products.length > 0) {
       this.products.forEach((product) => new ProductItem('.products', product, this.productCart.state.includes(String(product.id)),this.listeners
