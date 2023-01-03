@@ -33,7 +33,6 @@ render(): void {
   const contentProductInCart =document.createElement('div');
   contentProductInCart.classList.add('product-in-cart__content');
   contentProductInCart.id='product-in-cart__content';
-  contentProductInCart.innerText=` products list`;
   productInCart.appendChild(contentProductInCart);
   const summary = document.createElement('div');
   summary.classList.add('summary');

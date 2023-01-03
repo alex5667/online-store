@@ -23,19 +23,24 @@ class ProductInCarts  {
   }
 
   render(): void {
-    // const divContent= document.getElementById('product-in-cart__content') as HTMLDivElement;
-    // divContent.innerHTML = '';
-
-
+    const divContent= document.getElementById('product-in-cart__content') as HTMLDivElement;
+    divContent.innerHTML = '';
     this.products=this.products.filter((product)=>  this.productsInCart.includes(String( product.id)));
     console.log(this.products)
     if (this.products.length > 0) {
       this.products.forEach((product) => new ProductItem('.product-in-cart__content', product, true,this.listeners
       ));
     }
+    this.addCardClass();
+  }
 
 
-
+  addCardClass(): void{
+    const allCards = document.querySelectorAll('.product') as NodeListOf<Element>;
+    allCards.forEach((card)=> {
+      const allProductEl=card?.querySelectorAll('*') as NodeListOf<Element>;
+      allProductEl.forEach((el)=> el.classList.add('cart'));
+    })
   }
 
   
