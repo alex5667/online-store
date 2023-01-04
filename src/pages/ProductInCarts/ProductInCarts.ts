@@ -17,45 +17,40 @@ class ProductInCarts {
     this.listeners = listeners;
     const productsInLocal: string | null = localStorage.getItem('productCart');
     this.productsInCart = productsInLocal ? JSON.parse(productsInLocal) : [];
-    this.render();
+    this.setLimit();
 
   }
 
-  render(): void {
+  render(list:string[]): void {
     const divContent = document.getElementById('product-in-cart__content') as HTMLDivElement;
     divContent.innerHTML = '';
-    this.products = this.products.filter((product) => this.productsInCart.includes(String(product.id)));
-    if (this.products.length > 0) {
-      this.products.forEach((product, idx) => {
-        const productCard = document.createElement('div');
-        productCard.classList.add(`product-card-${idx + 1}`);
-        divContent.appendChild(productCard);
-        const productNum = document.createElement('div');
-        productNum.classList.add(`product-num-${idx + 1}`);
-        productNum.innerText = `${idx + 1}`;
-        productCard.appendChild(productNum);
-        const productContent = document.createElement('div');
-        productContent.classList.add(`product-content-${idx + 1}`);
-        productCard.appendChild(productContent);
-        new ProductItem(`.product-content-${idx + 1}`, product, true, this.listeners);
-        const buttons = document.createElement('div');
-        buttons.classList.add(`buttons-in-cart-${idx + 1}`);
-        productContent.appendChild(buttons);
-        this.addButtons(`.buttons-in-cart-${idx + 1}`, product.id, 'add');
-        const amount = document.createElement('div');
-        amount.classList.add(`amount-in-cart-${product.id}`);
-        buttons.appendChild(amount);
-        this.setAmountInButtons(product.id);
-
-        this.addButtons(`.buttons-in-cart-${idx + 1}`, product.id, 'del');
+     const productsList = this.products.filter((product) => list.includes(String(product.id)));
+     productsList.forEach((product, idx) => {
+          const productCard = document.createElement('div');
+          productCard.classList.add(`product-card-${idx + 1}`);
+          divContent.appendChild(productCard);
+          const productNum = document.createElement('div');
+          productNum.classList.add(`product-num-${idx + 1}`);
+          productNum.innerText = `${idx + 1}`;
+          productCard.appendChild(productNum);
+          const productContent = document.createElement('div');
+          productContent.classList.add(`product-content-${idx + 1}`);
+          productCard.appendChild(productContent);
+          new ProductItem(`.product-content-${idx + 1}`, product, true, this.listeners);
+          const buttons = document.createElement('div');
+          buttons.classList.add(`buttons-in-cart-${idx + 1}`);
+          productContent.appendChild(buttons);
+          this.addButtons(`.buttons-in-cart-${idx + 1}`, product.id, 'add');
+          const amount = document.createElement('div');
+          amount.classList.add(`amount-in-cart-${product.id}`);
+          buttons.appendChild(amount);
+          this.setAmountInButtons(product.id);
+          this.addButtons(`.buttons-in-cart-${idx + 1}`, product.id, 'del');
       });
-    }
     this.addCardClass();
-    this.setLimit();
     this.summaryProducts();
     this.summaryTotal();
   }
-
 
   addCardClass(): void {
     const allCards = document.querySelectorAll('.product') as NodeListOf<Element>;
@@ -64,6 +59,7 @@ class ProductInCarts {
       allProductEl.forEach((el) => el.classList.add('cart'));
     })
   }
+
   addButtons(elementSelector: string, id: number, action: string): void {
     const selector = document.querySelector(elementSelector) as HTMLDivElement;
     const button = document.createElement('button');
@@ -110,9 +106,33 @@ class ProductInCarts {
 
   setLimit(): void {
     const limit = document.getElementById('limit') as HTMLInputElement;
-    const setLimit = new Set(this.productsInCart);
-    limit.value = `${setLimit.size}`;
+    const listRender = [...new Set(this.productsInCart)];
+    const setLimit= listRender.length;
+    limit.value = `${setLimit}`;
+    limit.addEventListener('change',(e:Event)=> this.changeRender(e,listRender));
+    this.render(listRender);
+    this.setPage();
   }
+
+  changeRender(event:Event,list:string[]){
+    const target =event.target as HTMLInputElement;
+    const maxList =+target.value;
+    const sliceList= list.slice(0,maxList)
+    this.render(sliceList);
+  }
+
+  setPage(){
+    const amountPage = document.getElementById('page') as HTMLInputElement;
+    amountPage.value='1';
+    amountPage.addEventListener('change',(e:Event)=> this.changeRenderPage(e));
+  }
+
+  changeRenderPage(e:Event){
+    const target =e.target as HTMLInputElement;
+    console.log(target)
+  }
+
+
 
   summaryProducts() {
     const summaryProducts = document.querySelector('.summary__products') as HTMLDivElement;

@@ -36,7 +36,15 @@ class ProductInCartsView {
     headerProductInCart.appendChild(headerLimit);
     const headerPage = document.createElement('div')as HTMLDivElement;
     headerPage.classList.add('header__page');
-    headerPage.innerText = `Page:`;
+    const labePage = document.createElement('label') as HTMLLabelElement;
+    labePage.classList.add('label-input-page');
+    labePage.innerText = `Page:`;
+    headerPage.appendChild(labePage);
+    const inputPage = document.createElement('input') as HTMLInputElement;
+    inputPage.type = 'number';
+    inputPage.id = 'page';
+    inputPage.min='0';
+    headerPage.appendChild(inputPage);
     headerProductInCart.appendChild(headerPage);
     const contentProductInCart = document.createElement('div')as HTMLDivElement;
     contentProductInCart.classList.add('product-in-cart__content');
