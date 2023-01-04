@@ -35,10 +35,7 @@ export default class Route {
         path: /cart/,
         cb: () => {
           this.mainContainer.innerHTML = '';
-
           new ProductInCarts([this.addToCartListener]);
-          console.log('welcome in about page');
-
         },
       },
       {

@@ -41,12 +41,11 @@ class ProductInCarts {
         const buttons = document.createElement('div');
         buttons.classList.add(`buttons-in-cart-${idx + 1}`);
         productContent.appendChild(buttons);
-
         this.addButtons(`.buttons-in-cart-${idx + 1}`, product.id, 'add');
         const amount = document.createElement('div');
-        amount.classList.add(`amount-in-cart-${idx + 1}`);
-        amount.innerText=`0`;
+        amount.classList.add(`amount-in-cart-${product.id}`);
         buttons.appendChild(amount);
+        this.setAmountInButtons(product.id);
 
         this.addButtons(`.buttons-in-cart-${idx + 1}`, product.id, 'del');
       });
@@ -70,17 +69,18 @@ class ProductInCarts {
     const button = document.createElement('button');
     button.classList.add(`${action}-button`);
     button.innerText = `${action}`;
-    button.id = String(id);
+    button.setAttribute('button-id',String(id)) ;
     selector.appendChild(button);
-    button.addEventListener('click', (e: Event) => this.useButtons(e))
+    button.addEventListener('click', (e: Event) => this.useButtons(e));
   }
 
   useButtons(event: Event): void {
     const target = event.target as HTMLButtonElement;
+    const targetId= target.getAttribute('button-id') as string;
     if (target.classList.contains('add-button')) {
-      this.productsInCart.push(String(target.id))
+      this.productsInCart.push(String(targetId))
     } else {
-      const indexProduct = this.productsInCart.indexOf(String(target.id));
+      const indexProduct = this.productsInCart.indexOf(String(targetId));
       if (indexProduct != -1) {
         this.productsInCart.splice(indexProduct, 1);
       }
@@ -89,6 +89,7 @@ class ProductInCarts {
     this.summaryProducts();
     this.updateCounter();
     this.summaryTotal();
+    this.setAmountInButtons(+targetId);
   }
 
   private updateCounter(): void {
@@ -101,9 +102,16 @@ class ProductInCarts {
     }
   }
 
+  setAmountInButtons(id:number):void{
+    const buttonId= document.querySelector(`.amount-in-cart-${id}`) as HTMLDivElement;
+    const amount =this.productsInCart.filter((product)=> product===String(id)).length.toString();
+    buttonId.innerText=`${amount}`;
+  }
+
   setLimit(): void {
     const limit = document.getElementById('limit') as HTMLInputElement;
-    limit.value = `${this.productsInCart.length}`;
+    const setLimit = new Set(this.productsInCart);
+    limit.value = `${setLimit.size}`;
   }
 
   summaryProducts() {
@@ -114,7 +122,7 @@ class ProductInCarts {
   summaryTotal(): void{
     let sumTotal=0;
     for(const id of this.productsInCart){
-      sumTotal+=this.products.filter((product)=> product.id===+id)[0].price
+      sumTotal+=this.products.filter((product)=> product.id===+id)[0].price;
     }
     const summaryTotal = document.querySelector('.summary__total') as HTMLDivElement;
     summaryTotal.innerText = `Total: ${sumTotal}`;
