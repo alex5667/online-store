@@ -11,12 +11,14 @@ class ProductInCarts {
   productsInCart: string[];
   products: ProductModel[];
   listeners: EventListener[];
+  listRender: string[];
   constructor(listeners: EventListener[]) {
     new ProductInCartsView();
     this.products = products;
     this.listeners = listeners;
     const productsInLocal: string | null = localStorage.getItem('productCart');
     this.productsInCart = productsInLocal ? JSON.parse(productsInLocal) : [];
+    this.listRender=[];
     this.setLimit();
 
   }
@@ -106,31 +108,48 @@ class ProductInCarts {
 
   setLimit(): void {
     const limit = document.getElementById('limit') as HTMLInputElement;
-    const listRender = [...new Set(this.productsInCart)];
-    const setLimit= listRender.length;
+    this.listRender = [...new Set(this.productsInCart)];
+    const setLimit= this.listRender.length;
     limit.value = `${setLimit}`;
-    limit.addEventListener('change',(e:Event)=> this.changeRender(e,listRender));
-    this.render(listRender);
+    limit.addEventListener('change',(e:Event)=>{
+      console.log(this)
+      this.changeRender(e)
+    });
+    this.render(this.listRender);
     this.setPage();
   }
 
-  changeRender(event:Event,list:string[]){
-    const target =event.target as HTMLInputElement;
-    const maxList =+target.value;
-    const sliceList= list.slice(0,maxList)
-    this.render(sliceList);
+  changeRender(event:Event):void{
+    console.log(this)
+      const target =event.target as HTMLInputElement;
+      const maxList =+target.value;
+      const sliceList= this.listRender.slice(0,maxList);
+      this.render(sliceList);
   }
 
-  setPage(){
-    const amountPage = document.getElementById('page') as HTMLInputElement;
-    amountPage.value='1';
-    amountPage.addEventListener('change',(e:Event)=> this.changeRenderPage(e));
+  setPage():void{
+    const pageNumber= document.querySelector('.page-number')as HTMLDivElement;
+    pageNumber.innerText=`Page: 1`;
+    // const leftArrow= document.getElementById('left') as HTMLButtonElement;
+    // const rightArrow= document.getElementById('right') as HTMLButtonElement;
+    // // leftArrow.addEventListener('click', this.leftButton);
+    // rightArrow.addEventListener('click', this.changeRender.bind(this));
+
   }
 
-  changeRenderPage(e:Event){
-    const target =e.target as HTMLInputElement;
-    console.log(target)
-  }
+  // leftButton():void{
+
+
+  // // }
+  // rightButton():void{
+
+
+  // }
+
+  
+
+
+
 
 
 
