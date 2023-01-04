@@ -111,47 +111,39 @@ class ProductInCarts {
     this.listRender = [...new Set(this.productsInCart)];
     const setLimit= this.listRender.length;
     limit.value = `${setLimit}`;
-    limit.addEventListener('change',(e:Event)=>{
-      console.log(this)
-      this.changeRender(e)
-    });
+    limit.addEventListener('change',()=>this.changeRender());
     this.render(this.listRender);
     this.setPage();
   }
 
-  changeRender(event:Event):void{
-    console.log(this)
-      const target =event.target as HTMLInputElement;
-      const maxList =+target.value;
-      const sliceList= this.listRender.slice(0,maxList);
-      this.render(sliceList);
+  changeRender(page=0):void{
+      const limit = document.getElementById('limit') as HTMLInputElement;
+      const maxList = +limit.value;
+      const res = [];
+      for (let i = 0; i < this.listRender.length; i += maxList) {
+          const chunk = this.listRender.slice(i, i + maxList);
+          res.push(chunk);
+      }
+      console.log(page)
+      this.render(res[page]);
   }
 
   setPage():void{
     const pageNumber= document.querySelector('.page-number')as HTMLDivElement;
-    pageNumber.innerText=`Page: 1`;
-    // const leftArrow= document.getElementById('left') as HTMLButtonElement;
-    // const rightArrow= document.getElementById('right') as HTMLButtonElement;
-    // // leftArrow.addEventListener('click', this.leftButton);
-    // rightArrow.addEventListener('click', this.changeRender.bind(this));
+    let number=1;
+    pageNumber.innerText=`Page: ${number}`;
+    const leftArrow= document.getElementById('left') as HTMLButtonElement;
+    const rightArrow= document.getElementById('right') as HTMLButtonElement;
+    leftArrow.addEventListener('click',()=>{
+      this.changeRender(number--)
+      pageNumber.innerText=`Page: ${number}`;
+    });
+    rightArrow.addEventListener('click',()=> {
+      
+      this.changeRender(number++)});
+      pageNumber.innerText=`Page: ${number}`;
 
   }
-
-  // leftButton():void{
-
-
-  // // }
-  // rightButton():void{
-
-
-  // }
-
-  
-
-
-
-
-
 
   summaryProducts() {
     const summaryProducts = document.querySelector('.summary__products') as HTMLDivElement;
@@ -166,13 +158,6 @@ class ProductInCarts {
     const summaryTotal = document.querySelector('.summary__total') as HTMLDivElement;
     summaryTotal.innerText = `Total: ${sumTotal}`;
   }
-
-
-
-
-
-
-
 
 }
 

@@ -38,7 +38,7 @@ class ProductInCartsView {
     headerPage.classList.add('header__page');
     const leftArrow = document.createElement('button') as HTMLButtonElement;
     leftArrow.classList.add('arrow','left-arrow');
-    leftArrow.id = 'left-arrow';
+    leftArrow.id = 'left';
     leftArrow.innerText='left';
     headerPage.appendChild(leftArrow);
     const pageNumber= document.createElement('div') as HTMLDivElement;
