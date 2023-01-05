@@ -43,7 +43,7 @@ class ProductInCartsView {
     headerPage.appendChild(leftArrow);
     const pageNumber= document.createElement('div') as HTMLDivElement;
     pageNumber.classList.add('page-number');
-    pageNumber.innerText = `Page:`;
+    pageNumber.innerText = `Page: 1`;
     headerPage.appendChild(pageNumber);
     const rightArrow = document.createElement('button') as HTMLButtonElement;
     rightArrow.classList.add('arrow','right-arrow');

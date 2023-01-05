@@ -18,37 +18,37 @@ class ProductInCarts {
     this.listeners = listeners;
     const productsInLocal: string | null = localStorage.getItem('productCart');
     this.productsInCart = productsInLocal ? JSON.parse(productsInLocal) : [];
-    this.listRender=[];
+    this.listRender = [];
     this.setLimit();
 
   }
 
-  render(list:string[]): void {
+  render(list: string[]): void {
     const divContent = document.getElementById('product-in-cart__content') as HTMLDivElement;
     divContent.innerHTML = '';
-     const productsList = this.products.filter((product) => list.includes(String(product.id)));
-     productsList.forEach((product, idx) => {
-          const productCard = document.createElement('div');
-          productCard.classList.add(`product-card-${idx + 1}`);
-          divContent.appendChild(productCard);
-          const productNum = document.createElement('div');
-          productNum.classList.add(`product-num-${idx + 1}`);
-          productNum.innerText = `${idx + 1}`;
-          productCard.appendChild(productNum);
-          const productContent = document.createElement('div');
-          productContent.classList.add(`product-content-${idx + 1}`);
-          productCard.appendChild(productContent);
-          new ProductItem(`.product-content-${idx + 1}`, product, true, this.listeners);
-          const buttons = document.createElement('div');
-          buttons.classList.add(`buttons-in-cart-${idx + 1}`);
-          productContent.appendChild(buttons);
-          this.addButtons(`.buttons-in-cart-${idx + 1}`, product.id, 'add');
-          const amount = document.createElement('div');
-          amount.classList.add(`amount-in-cart-${product.id}`);
-          buttons.appendChild(amount);
-          this.setAmountInButtons(product.id);
-          this.addButtons(`.buttons-in-cart-${idx + 1}`, product.id, 'del');
-      });
+    const productsList = this.products.filter((product) => list.includes(String(product.id)));
+    productsList.forEach((product, idx) => {
+      const productCard = document.createElement('div');
+      productCard.classList.add(`product-card-${idx + 1}`);
+      divContent.appendChild(productCard);
+      const productNum = document.createElement('div');
+      productNum.classList.add(`product-num-${idx + 1}`);
+      productNum.innerText = `${idx + 1}`;
+      productCard.appendChild(productNum);
+      const productContent = document.createElement('div');
+      productContent.classList.add(`product-content-${idx + 1}`);
+      productCard.appendChild(productContent);
+      new ProductItem(`.product-content-${idx + 1}`, product, true, this.listeners);
+      const buttons = document.createElement('div');
+      buttons.classList.add(`buttons-in-cart-${idx + 1}`);
+      productContent.appendChild(buttons);
+      this.addButtons(`.buttons-in-cart-${idx + 1}`, product.id, 'add');
+      const amount = document.createElement('div');
+      amount.classList.add(`amount-in-cart-${product.id}`);
+      buttons.appendChild(amount);
+      this.setAmountInButtons(product.id);
+      this.addButtons(`.buttons-in-cart-${idx + 1}`, product.id, 'del');
+    });
     this.addCardClass();
     this.summaryProducts();
     this.summaryTotal();
@@ -67,14 +67,14 @@ class ProductInCarts {
     const button = document.createElement('button');
     button.classList.add(`${action}-button`);
     button.innerText = `${action}`;
-    button.setAttribute('button-id',String(id)) ;
+    button.setAttribute('button-id', String(id));
     selector.appendChild(button);
     button.addEventListener('click', (e: Event) => this.useButtons(e));
   }
 
   useButtons(event: Event): void {
     const target = event.target as HTMLButtonElement;
-    const targetId= target.getAttribute('button-id') as string;
+    const targetId = target.getAttribute('button-id') as string;
     if (target.classList.contains('add-button')) {
       this.productsInCart.push(String(targetId))
     } else {
@@ -91,8 +91,8 @@ class ProductInCarts {
   }
 
   private updateCounter(): void {
-    const cartAmount= document.querySelector('.cart-counter') as HTMLDivElement;
-    cartAmount.innerHTML='';
+    const cartAmount = document.querySelector('.cart-counter') as HTMLDivElement;
+    cartAmount.innerHTML = '';
     if (this.productsInCart.length > 0) {
       cartAmount.innerHTML = `${this.productsInCart.length}`;
     } else {
@@ -100,49 +100,62 @@ class ProductInCarts {
     }
   }
 
-  setAmountInButtons(id:number):void{
-    const buttonId= document.querySelector(`.amount-in-cart-${id}`) as HTMLDivElement;
-    const amount =this.productsInCart.filter((product)=> product===String(id)).length.toString();
-    buttonId.innerText=`${amount}`;
+  setAmountInButtons(id: number): void {
+    const buttonId = document.querySelector(`.amount-in-cart-${id}`) as HTMLDivElement;
+    const amount = this.productsInCart.filter((product) => product === String(id)).length.toString();
+    buttonId.innerText = `${amount}`;
   }
 
   setLimit(): void {
     const limit = document.getElementById('limit') as HTMLInputElement;
+    this.productsInCart=this.productsInCart.reverse();
     this.listRender = [...new Set(this.productsInCart)];
-    const setLimit= this.listRender.length;
+
+    const setLimit = this.listRender.length;
     limit.value = `${setLimit}`;
-    limit.addEventListener('change',()=>this.changeRender());
+    limit.addEventListener('change', () => this.changeRender());
+
     this.render(this.listRender);
-    this.setPage();
   }
 
-  changeRender(page=0):void{
-      const limit = document.getElementById('limit') as HTMLInputElement;
-      const maxList = +limit.value;
-      const res = [];
-      for (let i = 0; i < this.listRender.length; i += maxList) {
-          const chunk = this.listRender.slice(i, i + maxList);
-          res.push(chunk);
+
+  changeRender(): void {
+    const limit = document.getElementById('limit') as HTMLInputElement;
+    const pageNumber = document.querySelector('.page-number') as HTMLDivElement;
+    const leftArrow = document.getElementById('left') as HTMLButtonElement;
+    const rightArrow = document.getElementById('right') as HTMLButtonElement;
+    const maxList = +limit.value;
+    const chunkPages = this.getRenderList(maxList);
+    pageNumber.innerText = `Page: 1`;
+    let page = 0;
+
+    this.render(chunkPages[page]);
+    rightArrow.addEventListener('click', () => {
+      if (page + 1 < chunkPages.length) {
+        page += 1;
+        this.render(chunkPages[page]);
+        pageNumber.innerText = `Page: ${page + 1}`;
       }
-      console.log(page)
-      this.render(res[page]);
+    });
+
+    leftArrow.addEventListener('click', () => {
+      if (page - 1 >= 0) {
+        pageNumber.innerText = `Page: ${page}`;
+        page -= 1;
+        this.render(chunkPages[page]);
+      }
+    });
+
+
   }
 
-  setPage():void{
-    const pageNumber= document.querySelector('.page-number')as HTMLDivElement;
-    let number=1;
-    pageNumber.innerText=`Page: ${number}`;
-    const leftArrow= document.getElementById('left') as HTMLButtonElement;
-    const rightArrow= document.getElementById('right') as HTMLButtonElement;
-    leftArrow.addEventListener('click',()=>{
-      this.changeRender(number--)
-      pageNumber.innerText=`Page: ${number}`;
-    });
-    rightArrow.addEventListener('click',()=> {
-      
-      this.changeRender(number++)});
-      pageNumber.innerText=`Page: ${number}`;
-
+  getRenderList(max: number): string[][] {
+    const resPages = [];
+    for (let i = 0; i < this.listRender.length; i += max) {
+      const chunk = this.listRender.slice(i, i + max);
+      resPages.push(chunk);
+    }
+    return resPages;
   }
 
   summaryProducts() {
@@ -150,15 +163,14 @@ class ProductInCarts {
     summaryProducts.innerText = `Products: ${this.productsInCart.length}`;
   }
 
-  summaryTotal(): void{
-    let sumTotal=0;
-    for(const id of this.productsInCart){
-      sumTotal+=this.products.filter((product)=> product.id===+id)[0].price;
+  summaryTotal(): void {
+    let sumTotal = 0;
+    for (const id of this.productsInCart) {
+      sumTotal += this.products.filter((product) => product.id === +id)[0].price;
     }
     const summaryTotal = document.querySelector('.summary__total') as HTMLDivElement;
     summaryTotal.innerText = `Total: ${sumTotal}`;
   }
-
 }
 
 export default ProductInCarts;
