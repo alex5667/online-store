@@ -50,18 +50,22 @@ export default class ProductItem{
     const ratingEl = this.element.querySelector('.product__rating') as HTMLParagraphElement;
     const discountEL = this.element.querySelector('.product__discount') as HTMLParagraphElement;
     const priceEl = this.element.querySelector('.product__price') as HTMLParagraphElement;
+    const descriptionsEl = this.element.querySelector('.product__descriptions') as HTMLParagraphElement;
+
     const addToCartBtn = this.element.querySelector('.link-button-add-to-cart') as HTMLButtonElement;
     const details = this.element.querySelector('.link-button-details') as HTMLAnchorElement;
 
-    const {thumbnail,title,category,brand,stock,rating,discountPercentage,price,id}:ProductModel=this.product;
+
+    const {thumbnail,title,category,brand,stock,rating,discountPercentage,price,id,description}:ProductModel=this.product;
     image.src = thumbnail;
     titleEl.innerText =`${title}`;
     categoryEL.innerText =`Category: ${category}`;
     brandEl.innerText =`Brand: ${brand}`;
     stockEL.innerText =`Stock: ${stock}`;
     ratingEl.innerText =`Rating: ${rating}`;
-    discountEL.innerText =`Discount: ${discountPercentage}`;
-    priceEl.innerText =`Price: ${price}`;
+    discountEL.innerText =`Discount: ${discountPercentage}%`;
+    priceEl.innerText =`Price: €${price}`;
+    descriptionsEl.innerText=`Description:${description}`;
     if(details) {
       details.id=String(id);
       details.href=`/#/product-details/${String(id)}`

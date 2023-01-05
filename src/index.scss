@@ -26,7 +26,7 @@ $fontSize: rem(16);
 // Основные цвета
 $headercolor:#221f1f;
 $mainColor: #221f1f; // Цвет шрифта по умолчанию
-$green:#00a046;
+$mygreen:#00bc52;
 
 // Настройки адаптивной сетки ===============================================================================================================================================================================================================================================================================================
 
@@ -99,18 +99,70 @@ body {
     // .header__logo
 
     &__logo {
-      font-size: rem(32);
-      font-weight: 700;
-    }
 
+      position: relative;
+      a{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      img{
+      position: absolute;
+
+      margin-right: rem(5);
+      opacity: 0.6;
+      @include adaptiveValue("width", 40, 30);
+      @include adaptiveValue("height", 30, 20);
+
+      }
+    }
+    &__price{
+      color: $mygreen;
+      @include adaptiveValue("font-size", 18, 16);
+    }
     // .header__total-price
 
     &__total-price {
+      @include adaptiveValue("font-size", 16, 14);
+      color: #fff;
     }
 }
-.cart {
+.h1{
+  position: relative;
+  z-index: 2;
+  @include adaptiveValue("font-size", 28, 18);
+  font-weight: 700;
+  color: $mygreen;
+  @include adaptiveValue("padding-left", 20, 10);
+  filter: brightness(130%);
 }
 
+
+
+
+.cart {
+  display: block;
+  position: relative;
+  width: rem(40);
+  height: rem(40);
+  @include adaptiveValue("width", 40, 30);
+  @include adaptiveValue("height", 40, 30);
+  background: url('./components/img/shopping-basket-svgrepo-com.svg')  0 0/cover no-repeat;
+}
+.cart-counter{
+  @include adaptiveValue("width", 21, 16);
+  @include adaptiveValue("height", 21, 16);
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+  @include adaptiveValue("font-size", 14, 12);
+  color: #fff;
+  background-color: $mygreen;
+  padding: rem(3);
+  border-radius: 50%;
+  opacity: 0.9;
+}
   // main=======================================================================================================
 
   .main{
@@ -120,7 +172,6 @@ body {
       justify-content: space-between;
       flex-wrap: nowrap;
     }
-
   }
 
 

@@ -64,7 +64,7 @@ export default class ProductCart {
     for (const id of this.state) {
       sumTotal += this.products.filter((product) => product.id === +id)[0].price;
     }
-    headerTotalPrice.innerText = `Cart total: ${sumTotal}`;
+    headerTotalPrice.innerText = `€${sumTotal}`;
   }
 
   }
