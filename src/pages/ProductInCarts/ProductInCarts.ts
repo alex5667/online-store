@@ -170,6 +170,8 @@ class ProductInCarts {
     }
     const summaryTotal = document.querySelector('.summary__total') as HTMLDivElement;
     summaryTotal.innerText = `Total: ${sumTotal}`;
+    const headerTotalPrice= document.querySelector('.header__total-price') as HTMLDivElement;
+    headerTotalPrice.innerText = `Cart total: ${sumTotal}`;
   }
 }
 

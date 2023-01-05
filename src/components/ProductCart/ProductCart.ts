@@ -1,4 +1,5 @@
-
+import products from "../../db/products";
+import { ProductModel } from '../../components/models/product';
 
 const CART_STATE: string[] = [];
 
@@ -6,8 +7,9 @@ export default class ProductCart {
   state:string[];
   cartEl:HTMLDivElement;
   counterEl: HTMLDivElement;
-
+  products: ProductModel[];
   constructor() {
+    this.products= products;
     const savedCart = localStorage.getItem('productCart');
     this.state = savedCart ? JSON.parse(savedCart) : CART_STATE;
     this.cartEl = document.querySelector('.cart') as HTMLDivElement;
@@ -16,6 +18,7 @@ export default class ProductCart {
     this.counterEl = counter;
     this.counterEl.innerHTML=`${this.state.length}`;
     this.cartEl.append(counter);
+    this.setCartTotal();
   }
 
   public addToCart(e: Event): void {
@@ -39,6 +42,8 @@ export default class ProductCart {
       addToCartBtn.innerText = 'Add to cart';
     }
     this.updateCounter();
+    this.setCartTotal();
+
   }
 
 
@@ -53,4 +58,13 @@ export default class ProductCart {
     }
   }
 
-}
+  private setCartTotal(){
+    const headerTotalPrice= document.querySelector('.header__total-price') as HTMLDivElement;
+    let sumTotal = 0;
+    for (const id of this.state) {
+      sumTotal += this.products.filter((product) => product.id === +id)[0].price;
+    }
+    headerTotalPrice.innerText = `Cart total: ${sumTotal}`;
+  }
+
+  }
