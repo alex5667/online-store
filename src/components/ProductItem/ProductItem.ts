@@ -1,4 +1,4 @@
-import  {ProductModel}  from '../models/product';
+import { ProductModel } from '../models/product';
 import './ProductItem.scss'
 
 
@@ -6,11 +6,11 @@ export type EventListener = [string, (e: Event) => void];
 
 
 
-export default class ProductItem{
+export default class ProductItem {
   product: ProductModel;
   templateItem: HTMLTemplateElement;
-  sectionElement:HTMLElement;
-  element:HTMLElement;
+  sectionElement: HTMLElement;
+  element: HTMLElement;
   isInCart: boolean;
   listeners: EventListener[]
 
@@ -21,7 +21,7 @@ export default class ProductItem{
     isInCart: boolean,
     listeners: EventListener[],
 
-  ){
+  ) {
     this.product = product;
     this.listeners = listeners;
 
@@ -29,7 +29,7 @@ export default class ProductItem{
     this.templateItem = document.getElementById('product-item') as HTMLTemplateElement;
     const clonedNode = document.importNode(this.templateItem.content, true);
     this.element = clonedNode.firstElementChild as HTMLElement;
-    this.element.id=String(product.id);
+    this.element.id = String(product.id);
     this.sectionElement.insertAdjacentElement('afterbegin', this.element);
     this.isInCart = isInCart;
 
@@ -37,11 +37,11 @@ export default class ProductItem{
 
     this.render();
   }
-  
-  
 
 
-  render(): void{
+
+
+  render(): void {
     const image = this.element.querySelector('.product__img img') as HTMLImageElement;
     const titleEl = this.element.querySelector('.product__title') as HTMLHeadingElement;
     const categoryEL = this.element.querySelector('.product__category') as HTMLParagraphElement;
@@ -56,19 +56,19 @@ export default class ProductItem{
     const details = this.element.querySelector('.link-button-details') as HTMLAnchorElement;
 
 
-    const {thumbnail,title,category,brand,stock,rating,discountPercentage,price,id,description}:ProductModel=this.product;
+    const { thumbnail, title, category, brand, stock, rating, discountPercentage, price, id, description }: ProductModel = this.product;
     image.src = thumbnail;
-    titleEl.innerText =`${title}`;
-    categoryEL.innerText =`Category: ${category}`;
-    brandEl.innerText =`Brand: ${brand}`;
-    stockEL.innerText =`Stock: ${stock}`;
-    ratingEl.innerText =`Rating: ${rating}`;
-    discountEL.innerText =`Discount: ${discountPercentage}%`;
-    priceEl.innerText =`Price: €${price}`;
-    descriptionsEl.innerText=`Description:${description}`;
-    if(details) {
-      details.id=String(id);
-      details.href=`/#/product-details/${String(id)}`
+    titleEl.innerText = `${title}`;
+    categoryEL.innerText = `Category: ${category}`;
+    brandEl.innerText = `Brand: ${brand}`;
+    stockEL.innerText = `Stock: ${stock}`;
+    ratingEl.innerText = `Rating: ${rating}`;
+    discountEL.innerText = `Discount: ${discountPercentage}%`;
+    priceEl.innerText = `Price: €${price}`;
+    descriptionsEl.innerText = `Description:${description}`;
+    if (details) {
+      details.id = String(id);
+      details.href = `/#/product-details/${String(id)}`
     }
 
     if (this.isInCart) {
@@ -76,14 +76,40 @@ export default class ProductItem{
       addToCartBtn.innerText = 'Remove';
     }
     this.useListeners(addToCartBtn);
+    this.onMouseProduct();
+    // this.outMouseProduct();
 
   }
 
-  useListeners(Btn:HTMLButtonElement){
+  useListeners(Btn: HTMLButtonElement) {
     this.listeners.forEach((listener) => Btn.addEventListener(listener[0], listener[1]));
   }
 
-  
+  onMouseProduct(): void {
+    const products = document.querySelectorAll('.product') as NodeListOf<Element>;
+    products.forEach((product) => product.addEventListener('mouseover', (e: Event) => {
+      this.addVisibilityElement(e);
+    }))
+  }
+
+  addVisibilityElement(e: Event) {
+    const target = e.currentTarget as HTMLElement;
+    const allP=target.querySelectorAll('*') as NodeListOf<HTMLParagraphElement>;
+    allP.forEach((p)=> p.classList.add('visible'))
+  }
+  // outMouseProduct(): void {
+  //   const products = document.querySelectorAll('.product') as NodeListOf<Element>;
+  //   products.forEach((product) => product.addEventListener('mouseout', (e: Event) => {
+  //     this.removeVisibilityElement(e);
+  //   }))
+  // }
+  // removeVisibilityElement(e: Event) {
+  //   const target = e.currentTarget as HTMLElement;
+  //   const allP=target.querySelectorAll('*') as NodeListOf<HTMLParagraphElement>;
+  //   allP.forEach((p)=> p.classList.remove('visible'))
+  // }
+
+
 
 
 
