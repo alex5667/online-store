@@ -5,26 +5,41 @@ $maxWidth: 1920;
 $maxWidthContainer: 1200;
 $containerPadding: 30;
 $containerWidth: $maxWidthContainer + $containerPadding;
+$headercolor:#221f1f;
+$mainColor: #221f1f; // Цвет шрифта по умолчанию
+$mygreen:#00bc52;
 
 
 .product{
-  display: flex;
-  position: relative;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
   width: 25%;
   height: rem(320);
-  padding: 5px;
-  border: 0.2px solid #221f1f;
+  padding: 5px 10px;
+  cursor: pointer;
   &.small{
     width: 16.66%;
     height: rem(200);
   }
-  text-align:left;
-  vertical-align: baseline;
-  padding: 10px;
 
+
+  &__content{
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    box-shadow: 0px 0px 5px 0px rgba(34,31,31,1);
+    width: 100%;
+    height: 100%;
+    text-align:left;
+    vertical-align: baseline;
+    padding: 7px;
+
+  }
+  :hover {
+    transform: scale(1.1);
+    z-index: 5;
+    // transition: all 0.3s ease;
+  }
 
 
 }
@@ -35,8 +50,8 @@ $containerWidth: $maxWidthContainer + $containerPadding;
   &__img {
     position: relative;
     width: 100%;
-    height: 50%;
-    margin-bottom: rem(10);
+    height: 70%;
+    margin-bottom: rem(5);
     img {
       position: absolute;
       width: 100%;
@@ -51,6 +66,9 @@ $containerWidth: $maxWidthContainer + $containerPadding;
   // .product__main
 
   &__main {
+    bottom: 0;
+    left: 0;
+    z-index: 2;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -65,6 +83,7 @@ $containerWidth: $maxWidthContainer + $containerPadding;
   &__title {
     line-height: 120%;
     margin-bottom: rem(10) ;
+    min-height: rem(35);
 
   }
 
@@ -75,11 +94,13 @@ $containerWidth: $maxWidthContainer + $containerPadding;
       margin-bottom: rem(5);
       @include adaptiveValue("font-size", 14, 12);
       }
-
+    :nth-child(-n + 5),
+    :nth-child(7){
+      display: none;
+    }
   }
 
   &__descriptions {
-    display: none;
 
   }
   // .product__category
