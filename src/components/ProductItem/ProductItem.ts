@@ -83,6 +83,8 @@ export default class ProductItem{
     this.listeners.forEach((listener) => Btn.addEventListener(listener[0], listener[1]));
   }
 
+  
+
 
 
 
