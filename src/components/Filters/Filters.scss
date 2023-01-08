@@ -2,6 +2,9 @@
 @import "../../scss/base/mixins.scss";
 @import 'nouislider/dist/nouislider.css';
 
+// Основные цвета
+$mainColor: #221f1f; 
+$mygreen:#00bc52;
 
 .main{
   &__filters{
@@ -10,15 +13,14 @@
     flex-direction: column;
     align-items: flex-end;
     justify-content: space-between;
-
   }
+
   &__content{
     display: flex;
     width: 80%;
     flex-direction:column;
     align-items: center;
     justify-content: flex-start;
-    
   }
 }
 
@@ -29,8 +31,30 @@
     align-items: center;
     justify-content: space-between;
     width: 100%;
+    padding: rem(10);
   }
 }
+
+.sort-filter{
+  border: 0.5px solid $mainColor;
+  border-radius: rem(3);
+  padding: rem(5);
+  font-size: rem(14);
+  option{
+    padding-bottom: rem(10);
+  }
+
+
+}
+
+.search-filter{
+  border: 0.5px solid $mainColor;
+  border-radius: rem(3);
+  padding: rem(5);
+  font-size: rem(14);
+}
+
+
 
 
 .filter{

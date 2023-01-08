@@ -168,7 +168,9 @@ $mygreen:#00bc52;
   width: 45%;
   text-align: center;
   box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.47);
-  height: rem(20);
+  height: rem(28);
+  color: $mygreen;
+  font-size: rem(14);
   
 
   &:hover{
