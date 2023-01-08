@@ -52,7 +52,7 @@ export default class ProductItem {
     const priceEl = this.element.querySelector('.product__price') as HTMLParagraphElement;
     const descriptionsEl = this.element.querySelector('.product__descriptions') as HTMLParagraphElement;
 
-    const addToCartBtn = this.element.querySelector('.link-button-add-to-cart') as HTMLButtonElement;
+    const addToCartBtn = this.element.querySelector('.link-button-add-to-cart') as HTMLAnchorElement;
     const details = this.element.querySelector('.link-button-details') as HTMLAnchorElement;
 
 
@@ -75,43 +75,39 @@ export default class ProductItem {
       this.element.classList.add('product--in-cart');
       addToCartBtn.innerText = 'Remove';
     }
-    this.useListeners(addToCartBtn);
+    this.useListeners(addToCartBtn );
     this.onMouseProduct();
-    // this.outMouseProduct();
+    this.outMouseProduct();
 
   }
 
-  useListeners(Btn: HTMLButtonElement) {
+  useListeners(Btn: HTMLAnchorElement) {
     this.listeners.forEach((listener) => Btn.addEventListener(listener[0], listener[1]));
   }
 
   onMouseProduct(): void {
-    const products = document.querySelectorAll('.product') as NodeListOf<Element>;
+    const products = document.querySelectorAll('.product__img') as NodeListOf<Element>;
     products.forEach((product) => product.addEventListener('mouseover', (e: Event) => {
       this.addVisibilityElement(e);
     }))
   }
 
   addVisibilityElement(e: Event) {
-    const target = e.currentTarget as HTMLElement;
-    const allP=target.querySelectorAll('*') as NodeListOf<HTMLParagraphElement>;
-    allP.forEach((p)=> p.classList.add('visible'))
+    console.log(e.target)
+    const target = (e.currentTarget as HTMLElement).closest('.product') as HTMLElement;
+    const allP = target.querySelectorAll('*') as NodeListOf<HTMLParagraphElement>;
+    allP.forEach((p) => p.classList.add('visible'))
   }
-  // outMouseProduct(): void {
-  //   const products = document.querySelectorAll('.product') as NodeListOf<Element>;
-  //   products.forEach((product) => product.addEventListener('mouseout', (e: Event) => {
-  //     this.removeVisibilityElement(e);
-  //   }))
-  // }
-  // removeVisibilityElement(e: Event) {
-  //   const target = e.currentTarget as HTMLElement;
-  //   const allP=target.querySelectorAll('*') as NodeListOf<HTMLParagraphElement>;
-  //   allP.forEach((p)=> p.classList.remove('visible'))
-  // }
-
-
-
-
-
+  outMouseProduct(): void {
+    const products = document.querySelectorAll('.product__img') as NodeListOf<Element>;
+    products.forEach((product) => product.addEventListener('mouseout', (e: Event) => {
+      this.removeVisibilityElement(e);
+    }))
+  }
+  removeVisibilityElement(e: Event) {
+    const target = (e.currentTarget as HTMLElement).closest('.product') as HTMLElement;
+    const allP=target.querySelectorAll('*') as NodeListOf<HTMLParagraphElement>;
+    allP.forEach((p)=> p.classList.remove('visible'))
+  }
 
 }

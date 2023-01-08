@@ -10,7 +10,9 @@ $mainColor: #221f1f; // Цвет шрифта по умолчанию
 $mygreen:#00bc52;
 
 
-.product{
+
+
+.product {
   position: relative;
   width: 25%;
   padding: 5px 10px;
@@ -33,20 +35,15 @@ $mygreen:#00bc52;
     text-align:left;
     vertical-align: baseline;
     padding: 7px;
-
-    & .visible {
-      top: 0;
-      left: 0;
-      position: relative; 
+    &.visible {
+      top: 0px;
+      left: 0px;
+      position: absolute; 
       z-index: 150;
-
-   }
-
+      min-height: rem(550);
+      background: #fff;
   }
-
-}
-
-.product {
+  }
 
   // .product__img
 
@@ -56,7 +53,6 @@ $mygreen:#00bc52;
     min-height: rem(200);
     margin-bottom: rem(5);
 
-
     img {
       position: absolute;
       width: 100%;
@@ -65,6 +61,9 @@ $mygreen:#00bc52;
       left: 0;
       object-fit: cover;
     }
+    &.visible {
+      height: 40%;
+  }
 
 
   }
@@ -72,9 +71,7 @@ $mygreen:#00bc52;
   // .product__main
 
   &__main {
-    bottom: 0;
-    left: 0;
-    // z-index: 2;
+
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -82,7 +79,11 @@ $mygreen:#00bc52;
     text-align:left;
     vertical-align: baseline;
     width: 100%;
+    &.visible {
+      height: 60%;
+      justify-content: space-around;
 
+  }
 
   }
 
@@ -91,8 +92,11 @@ $mygreen:#00bc52;
   &__title {
     line-height: 120%;
     margin-bottom: rem(10) ;
-    min-height: rem(35);
+    min-height: rem(32);
+    & .visible {
+      min-height: rem(16);
 
+    }
   }
 
   // .product__description
@@ -150,11 +154,56 @@ $mygreen:#00bc52;
   // .product__footer
 
   &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
   }
 }
 .link-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  width: 45%;
+  text-align: center;
+  box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.47);
+  height: rem(20);
+  
+
+  &:hover{
+    animation: tracking-in-expand 0.7s cubic-bezier(0.215, 0.610, 0.355, 1.000) both;
+  }
+
+}
+
+@-webkit-keyframes tracking-in-expand {
+  0% {
+    letter-spacing: -0.5em;
+    opacity: 0;
+  }
+  40% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes tracking-in-expand {
+  0% {
+    letter-spacing: -0.5em;
+    opacity: 0;
+  }
+  40% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 .link-button-add-to-cart {
 }
 .link-button-details {
+
+
 }
