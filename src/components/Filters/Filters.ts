@@ -7,7 +7,8 @@ import { categories, brands, prices, quantities } from '../../db/productsPropert
 import CheckboxItem from '../Filters/Checkbox/CheckboxItem';
 import ProductsList from '../ProductsList/ProductsList';
 import Products from '../../db/products';
-import './Filters.scss'
+import ChangeView from '../view/ChangeView';
+import './Filters.scss';
 
 
 
@@ -36,7 +37,7 @@ export default class Filters {
     this.searchFilter();
     this.resetFilter();
     this.setAmountProducts();
-    this.changeView();
+    new ChangeView();
 
   }
   resetFilter(): void {
@@ -308,18 +309,18 @@ export default class Filters {
     this.state.price = [minPrice, maxPrice];
     this.state.quantity = [minQuantity, maxQuantity];
   }
-  changeView(): void {
-    const smallView = document.getElementById('small-view');
-    const largeView = document.getElementById('large-view');
-    smallView?.addEventListener('click', () => {
-      const productItems = document.querySelectorAll('.product')
-      productItems.forEach((card) => card.classList.remove('large'))
-      productItems.forEach((card) => card.classList.add('small'))
-    });
-    largeView?.addEventListener('click', () => {
-      const productItems = document.querySelectorAll('.product')
-      productItems.forEach((card) => card.classList.remove('small'))
-      productItems.forEach((card) => card.classList.add('large'))
-    });
-  }
+  // changeView(): void {
+  //   const smallView = document.getElementById('small-view');
+  //   const largeView = document.getElementById('large-view');
+  //   smallView?.addEventListener('click', () => {
+  //     const productItems = document.querySelectorAll('.product')
+  //     productItems.forEach((card) => card.classList.remove('large'))
+  //     productItems.forEach((card) => card.classList.add('small'))
+  //   });
+  //   largeView?.addEventListener('click', () => {
+  //     const productItems = document.querySelectorAll('.product')
+  //     productItems.forEach((card) => card.classList.remove('small'))
+  //     productItems.forEach((card) => card.classList.add('large'))
+  //   });
+  // }
 }

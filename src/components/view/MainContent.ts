@@ -24,11 +24,10 @@ export default class MainContent {
       <input type="search" id="search-filter" class="search-filter" placeholder="Search product"
         autocomplete="off" />
       <div class="change-view">
-        <div  id="small-view" class="button view__small">
-          small
+        <div  id="small-view" class="button-view view__small">
         </div>
-        <div  id="large-view" class="button view__large">
-          large
+        <div  id="large-view" class="button-view view__large">
+          
         </div>
       </div>
     </div>
