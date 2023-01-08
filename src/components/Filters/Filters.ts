@@ -310,7 +310,7 @@ export default class Filters {
   }
   changeView(): void {
     const smallView = document.getElementById('small-view');
-    const largeView = document.getElementById('large-view')
+    const largeView = document.getElementById('large-view');
     smallView?.addEventListener('click', () => {
       const productItems = document.querySelectorAll('.product')
       productItems.forEach((card) => card.classList.remove('large'))
