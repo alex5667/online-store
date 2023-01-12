@@ -17250,7 +17250,17 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ 701:
+/***/ 197:
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ }),
+
+/***/ 495:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -19606,6 +19616,7 @@ const filter_1 = __webpack_require__(546);
 const productsProperties_1 = __webpack_require__(65);
 const CheckboxItem_1 = __importDefault(__webpack_require__(786));
 const products_1 = __importDefault(__webpack_require__(926));
+const ChangeView_1 = __importDefault(__webpack_require__(223));
 __webpack_require__(508);
 class Filters {
     categories = productsProperties_1.categories;
@@ -19629,7 +19640,7 @@ class Filters {
         this.searchFilter();
         this.resetFilter();
         this.setAmountProducts();
-        this.changeView();
+        new ChangeView_1.default();
     }
     resetFilter() {
         const resetBtn = document.querySelector('.filters__reset-button');
@@ -19862,20 +19873,6 @@ class Filters {
         this.state.price = [minPrice, maxPrice];
         this.state.quantity = [minQuantity, maxQuantity];
     }
-    changeView() {
-        const smallView = document.getElementById('small-view');
-        const largeView = document.getElementById('large-view');
-        smallView?.addEventListener('click', () => {
-            const productItems = document.querySelectorAll('.product');
-            productItems.forEach((card) => card.classList.remove('large'));
-            productItems.forEach((card) => card.classList.add('small'));
-        });
-        largeView?.addEventListener('click', () => {
-            const productItems = document.querySelectorAll('.product');
-            productItems.forEach((card) => card.classList.remove('small'));
-            productItems.forEach((card) => card.classList.add('large'));
-        });
-    }
 }
 exports["default"] = Filters;
 
@@ -19883,17 +19880,23 @@ exports["default"] = Filters;
 /***/ }),
 
 /***/ 590:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
 
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+const products_1 = __importDefault(__webpack_require__(926));
 const CART_STATE = [];
 class ProductCart {
     state;
     cartEl;
     counterEl;
+    products;
     constructor() {
+        this.products = products_1.default;
         const savedCart = localStorage.getItem('productCart');
         this.state = savedCart ? JSON.parse(savedCart) : CART_STATE;
         this.cartEl = document.querySelector('.cart');
@@ -19902,6 +19905,7 @@ class ProductCart {
         this.counterEl = counter;
         this.counterEl.innerHTML = `${this.state.length}`;
         this.cartEl.append(counter);
+        this.setCartTotal();
     }
     addToCart(e) {
         let target = e.target;
@@ -19911,7 +19915,6 @@ class ProductCart {
         const addToCartBtn = target.querySelector('.link-button-add-to-cart');
         if (!this.state.includes(target.id)) {
             this.state = [...this.state, target.id];
-            console.log(this.state);
             localStorage.setItem('productCart', JSON.stringify(this.state));
             target.classList.add('product--in-cart');
             addToCartBtn.innerText = 'Remove';
@@ -19922,6 +19925,7 @@ class ProductCart {
             addToCartBtn.innerText = 'Add to cart';
         }
         this.updateCounter();
+        this.setCartTotal();
     }
     updateCounter() {
         this.counterEl.innerHTML = '';
@@ -19931,6 +19935,14 @@ class ProductCart {
         else {
             this.counterEl.innerHTML = `${this.state.length}`;
         }
+    }
+    setCartTotal() {
+        const headerTotalPrice = document.querySelector('.header__total-price');
+        let sumTotal = 0;
+        for (const id of this.state) {
+            sumTotal += this.products.filter((product) => product.id === +id)[0].price;
+        }
+        headerTotalPrice.innerText = `€${sumTotal}`;
     }
 }
 exports["default"] = ProductCart;
@@ -19973,17 +19985,19 @@ class ProductItem {
         const ratingEl = this.element.querySelector('.product__rating');
         const discountEL = this.element.querySelector('.product__discount');
         const priceEl = this.element.querySelector('.product__price');
+        const descriptionsEl = this.element.querySelector('.product__descriptions');
         const addToCartBtn = this.element.querySelector('.link-button-add-to-cart');
         const details = this.element.querySelector('.link-button-details');
-        const { thumbnail, title, category, brand, stock, rating, discountPercentage, price, id } = this.product;
+        const { thumbnail, title, category, brand, stock, rating, discountPercentage, price, id, description } = this.product;
         image.src = thumbnail;
         titleEl.innerText = `${title}`;
         categoryEL.innerText = `Category: ${category}`;
         brandEl.innerText = `Brand: ${brand}`;
         stockEL.innerText = `Stock: ${stock}`;
         ratingEl.innerText = `Rating: ${rating}`;
-        discountEL.innerText = `Discount: ${discountPercentage}`;
-        priceEl.innerText = `Price: ${price}`;
+        discountEL.innerText = `Discount: ${discountPercentage}%`;
+        priceEl.innerText = `Price: €${price}`;
+        descriptionsEl.innerText = `Description:${description}`;
         if (details) {
             details.id = String(id);
             details.href = `/#/product-details/${String(id)}`;
@@ -19993,9 +20007,29 @@ class ProductItem {
             addToCartBtn.innerText = 'Remove';
         }
         this.useListeners(addToCartBtn);
+        this.onMouseProduct('mouseover', 'add');
+        this.onMouseProduct('mouseout', 'remove');
     }
     useListeners(Btn) {
         this.listeners.forEach((listener) => Btn.addEventListener(listener[0], listener[1]));
+    }
+    onMouseProduct(event, action) {
+        const products = document.querySelectorAll('.product__img');
+        products.forEach((product) => product.addEventListener(`${event}`, (e) => {
+            this.visibilityElement(e, action);
+        }));
+    }
+    visibilityElement(e, action) {
+        const target = e.currentTarget.closest('.product');
+        const allP = target.querySelectorAll('*');
+        allP.forEach((p) => {
+            if (action == 'add') {
+                p.classList.add('visible');
+            }
+            else {
+                p.classList.remove('visible');
+            }
+        });
     }
 }
 exports["default"] = ProductItem;
@@ -20023,11 +20057,11 @@ class ProductsList {
     element;
     productCart;
     listeners;
-    constructor(cart, listeners = []) {
+    constructor(cart, listeners = [], ElementSelector) {
         this.products = products_1.default;
         this.productCart = cart;
         this.listeners = listeners;
-        this.sectionElement = document.getElementById('main__content');
+        this.sectionElement = document.getElementById(ElementSelector);
         this.templateItem = document.getElementById('products-list');
         const clonedNode = document.importNode(this.templateItem.content, true);
         this.element = clonedNode.firstElementChild;
@@ -20142,7 +20176,7 @@ class App {
     constructor(productCart, addToCartListener) {
         this.mainFilters = new MainFilters_1.default();
         this.mainContent = new MainContent_1.default();
-        this.productsList = new ProductsList_1.default(productCart, addToCartListener);
+        this.productsList = new ProductsList_1.default(productCart, addToCartListener, 'main__content');
         this.filters = new Filters_1.default(this.productsList);
         this.render();
     }
@@ -20166,8 +20200,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const App_1 = __importDefault(__webpack_require__(265));
 const products_1 = __importDefault(__webpack_require__(926));
-const ProductDetails_1 = __importDefault(__webpack_require__(654));
+const ProductDetails_1 = __importDefault(__webpack_require__(418));
 const ProductCart_1 = __importDefault(__webpack_require__(590));
+const ProductInCarts_1 = __importDefault(__webpack_require__(109));
 class Route {
     products;
     productCart;
@@ -20185,9 +20220,10 @@ class Route {
         this.mainContainer = document.getElementById('main__container');
         this.routes = [
             {
-                path: /about/,
+                path: /cart/,
                 cb: () => {
-                    console.log('welcome in about page');
+                    this.mainContainer.innerHTML = '';
+                    new ProductInCarts_1.default([this.addToCartListener]);
                 },
             },
             {
@@ -20264,6 +20300,58 @@ exports["default"] = Route;
 
 /***/ }),
 
+/***/ 223:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+class ChangeView {
+    smallView;
+    largeView;
+    constructor() {
+        this.smallView = document.getElementById('small-view');
+        this.largeView = document.getElementById('large-view');
+        this.changeView();
+    }
+    render(num, selector) {
+        for (let i = 0; i <= num; i++) {
+            const tile = document.createElement('div');
+            if (selector === 'large-view') {
+                tile.classList.add('large-tile');
+                this.largeView.appendChild(tile);
+            }
+            else {
+                tile.classList.add('small-tile');
+                this.smallView.appendChild(tile);
+            }
+        }
+    }
+    changeView() {
+        this.smallView?.addEventListener('click', (e) => this.addRemoveClasslist(e));
+        this.largeView?.addEventListener('click', (e) => this.addRemoveClasslist(e));
+        this.render(3, 'large-view');
+        this.render(8, 'small-view');
+    }
+    addRemoveClasslist(event) {
+        const productItems = document.querySelectorAll('.product');
+        const target = event.currentTarget;
+        productItems.forEach((card) => {
+            target.classList.contains('view__small') ? card.classList.add('small') :
+                card.classList.remove('small');
+            const cardEls = card.querySelectorAll('*');
+            cardEls.forEach((el) => {
+                target.classList.contains('view__small') ? el.classList.add('small') :
+                    el.classList.remove('small');
+            });
+        });
+    }
+}
+exports["default"] = ChangeView;
+
+
+/***/ }),
+
 /***/ 384:
 /***/ ((__unused_webpack_module, exports) => {
 
@@ -20296,11 +20384,10 @@ class MainContent {
       <input type="search" id="search-filter" class="search-filter" placeholder="Search product"
         autocomplete="off" />
       <div class="change-view">
-        <div  id="small-view" class="button view__small">
-          small
+        <div  id="small-view" class="button-view view__small">
         </div>
-        <div  id="large-view" class="button view__large">
-          large
+        <div  id="large-view" class="button-view view__large">
+          
         </div>
       </div>
     </div>
@@ -22285,7 +22372,7 @@ route.listen();
 
 /***/ }),
 
-/***/ 654:
+/***/ 418:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -22295,7 +22382,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const ProductItem_1 = __importDefault(__webpack_require__(210));
-__webpack_require__(701);
+__webpack_require__(197);
 class ProductDetails extends ProductItem_1.default {
     constructor(product, addToCartListener) {
         super('.main__container', product, true, addToCartListener);
@@ -22315,6 +22402,263 @@ class ProductDetails extends ProductItem_1.default {
     }
 }
 exports["default"] = ProductDetails;
+
+
+/***/ }),
+
+/***/ 109:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const ProductInCartsView_1 = __importDefault(__webpack_require__(292));
+const ProductItem_1 = __importDefault(__webpack_require__(210));
+const products_1 = __importDefault(__webpack_require__(926));
+__webpack_require__(495);
+class ProductInCarts {
+    productsInCart;
+    products;
+    listeners;
+    listRender;
+    constructor(listeners) {
+        new ProductInCartsView_1.default();
+        this.products = products_1.default;
+        this.listeners = listeners;
+        const productsInLocal = localStorage.getItem('productCart');
+        this.productsInCart = productsInLocal ? JSON.parse(productsInLocal) : [];
+        this.listRender = [];
+        this.setLimit();
+    }
+    render(list) {
+        const divContent = document.getElementById('product-in-cart__content');
+        divContent.innerHTML = '';
+        const productsList = this.products.filter((product) => list.includes(String(product.id)));
+        productsList.forEach((product, idx) => {
+            const productCard = document.createElement('div');
+            productCard.classList.add(`product-card-${idx + 1}`);
+            divContent.appendChild(productCard);
+            const productNum = document.createElement('div');
+            productNum.classList.add(`product-num-${idx + 1}`);
+            productNum.innerText = `${idx + 1}`;
+            productCard.appendChild(productNum);
+            const productContent = document.createElement('div');
+            productContent.classList.add(`product-content-${idx + 1}`);
+            productCard.appendChild(productContent);
+            new ProductItem_1.default(`.product-content-${idx + 1}`, product, true, this.listeners);
+            const buttons = document.createElement('div');
+            buttons.classList.add(`buttons-in-cart-${idx + 1}`);
+            productContent.appendChild(buttons);
+            this.addButtons(`.buttons-in-cart-${idx + 1}`, product.id, 'add');
+            const amount = document.createElement('div');
+            amount.classList.add(`amount-in-cart-${product.id}`);
+            buttons.appendChild(amount);
+            this.setAmountInButtons(product.id);
+            this.addButtons(`.buttons-in-cart-${idx + 1}`, product.id, 'del');
+        });
+        this.addCardClass();
+        this.summaryProducts();
+        this.summaryTotal();
+    }
+    addCardClass() {
+        const allCards = document.querySelectorAll('.product');
+        allCards.forEach((card) => {
+            const allProductEl = card?.querySelectorAll('*');
+            allProductEl.forEach((el) => el.classList.add('cart'));
+        });
+    }
+    addButtons(elementSelector, id, action) {
+        const selector = document.querySelector(elementSelector);
+        const button = document.createElement('button');
+        button.classList.add(`${action}-button`);
+        button.innerText = `${action}`;
+        button.setAttribute('button-id', String(id));
+        selector.appendChild(button);
+        button.addEventListener('click', (e) => this.useButtons(e));
+    }
+    useButtons(event) {
+        const target = event.target;
+        const targetId = target.getAttribute('button-id');
+        if (target.classList.contains('add-button')) {
+            this.productsInCart.push(String(targetId));
+        }
+        else {
+            const indexProduct = this.productsInCart.indexOf(String(targetId));
+            if (indexProduct != -1) {
+                this.productsInCart.splice(indexProduct, 1);
+            }
+        }
+        localStorage.setItem('productCart', JSON.stringify(this.productsInCart));
+        this.summaryProducts();
+        this.updateCounter();
+        this.summaryTotal();
+        this.setAmountInButtons(+targetId);
+    }
+    updateCounter() {
+        const cartAmount = document.querySelector('.cart-counter');
+        cartAmount.innerHTML = '';
+        if (this.productsInCart.length > 0) {
+            cartAmount.innerHTML = `${this.productsInCart.length}`;
+        }
+        else {
+            cartAmount.innerHTML = `${this.productsInCart.length}`;
+        }
+    }
+    setAmountInButtons(id) {
+        const buttonId = document.querySelector(`.amount-in-cart-${id}`);
+        const amount = this.productsInCart.filter((product) => product === String(id)).length.toString();
+        buttonId.innerText = `${amount}`;
+    }
+    setLimit() {
+        const limit = document.getElementById('limit');
+        this.productsInCart = this.productsInCart.reverse();
+        this.listRender = [...new Set(this.productsInCart)];
+        const setLimit = this.listRender.length;
+        limit.value = `${setLimit}`;
+        limit.addEventListener('change', () => this.changeRender());
+        this.render(this.listRender);
+    }
+    changeRender() {
+        const limit = document.getElementById('limit');
+        const pageNumber = document.querySelector('.page-number');
+        const leftArrow = document.getElementById('left');
+        const rightArrow = document.getElementById('right');
+        const maxList = +limit.value;
+        const chunkPages = this.getRenderList(maxList);
+        pageNumber.innerText = `Page: 1`;
+        let page = 0;
+        this.render(chunkPages[page]);
+        rightArrow.addEventListener('click', () => {
+            if (page + 1 < chunkPages.length) {
+                page += 1;
+                this.render(chunkPages[page]);
+                pageNumber.innerText = `Page: ${page + 1}`;
+            }
+        });
+        leftArrow.addEventListener('click', () => {
+            if (page - 1 >= 0) {
+                pageNumber.innerText = `Page: ${page}`;
+                page -= 1;
+                this.render(chunkPages[page]);
+            }
+        });
+    }
+    getRenderList(max) {
+        const resPages = [];
+        for (let i = 0; i < this.listRender.length; i += max) {
+            const chunk = this.listRender.slice(i, i + max);
+            resPages.push(chunk);
+        }
+        return resPages;
+    }
+    summaryProducts() {
+        const summaryProducts = document.querySelector('.summary__products');
+        summaryProducts.innerText = `Products: ${this.productsInCart.length}`;
+    }
+    summaryTotal() {
+        let sumTotal = 0;
+        for (const id of this.productsInCart) {
+            sumTotal += this.products.filter((product) => product.id === +id)[0].price;
+        }
+        const summaryTotal = document.querySelector('.summary__total');
+        summaryTotal.innerText = `Total: ${sumTotal}`;
+        const headerTotalPrice = document.querySelector('.header__total-price');
+        headerTotalPrice.innerText = `€${sumTotal}`;
+    }
+}
+exports["default"] = ProductInCarts;
+
+
+/***/ }),
+
+/***/ 292:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+class ProductInCartsView {
+    constructor() {
+        this.render();
+    }
+    render() {
+        const mainContainer = document.getElementById('main__container');
+        const containerContent = document.createElement('div');
+        containerContent.classList.add('container-content');
+        mainContainer.appendChild(containerContent);
+        const productInCart = document.createElement('div');
+        productInCart.classList.add('product-in-cart');
+        containerContent.appendChild(productInCart);
+        const headerProductInCart = document.createElement('div');
+        headerProductInCart.classList.add('product-in-cart__header');
+        productInCart.appendChild(headerProductInCart);
+        const headerH2 = document.createElement('h2');
+        headerH2.classList.add('header__h2');
+        headerH2.innerText = `Products In Cart`;
+        headerProductInCart.appendChild(headerH2);
+        const headerLimit = document.createElement('div');
+        headerLimit.classList.add('header__limit');
+        const labelInputLimit = document.createElement('label');
+        labelInputLimit.classList.add('label-input-limit');
+        labelInputLimit.innerText = `Limit:`;
+        headerLimit.appendChild(labelInputLimit);
+        const inputLimit = document.createElement('input');
+        inputLimit.type = 'number';
+        inputLimit.id = 'limit';
+        inputLimit.min = '0';
+        headerLimit.appendChild(inputLimit);
+        headerProductInCart.appendChild(headerLimit);
+        const headerPage = document.createElement('div');
+        headerPage.classList.add('header__page');
+        const leftArrow = document.createElement('button');
+        leftArrow.classList.add('arrow', 'left-arrow');
+        leftArrow.id = 'left';
+        leftArrow.innerText = 'left';
+        headerPage.appendChild(leftArrow);
+        const pageNumber = document.createElement('div');
+        pageNumber.classList.add('page-number');
+        pageNumber.innerText = `Page: 1`;
+        headerPage.appendChild(pageNumber);
+        const rightArrow = document.createElement('button');
+        rightArrow.classList.add('arrow', 'right-arrow');
+        rightArrow.id = 'right';
+        rightArrow.innerText = 'right';
+        headerPage.appendChild(rightArrow);
+        headerProductInCart.appendChild(headerPage);
+        const contentProductInCart = document.createElement('div');
+        contentProductInCart.classList.add('product-in-cart__content');
+        contentProductInCart.id = 'product-in-cart__content';
+        productInCart.appendChild(contentProductInCart);
+        const summary = document.createElement('div');
+        summary.classList.add('summary');
+        containerContent.appendChild(summary);
+        const summaryH2 = document.createElement('h2');
+        summaryH2.classList.add('summary__title');
+        summaryH2.innerText = `Summary`;
+        summary.appendChild(summaryH2);
+        const summaryProducts = document.createElement('div');
+        summaryProducts.classList.add('summary__products');
+        summaryProducts.innerText = ` Products:`;
+        summary.appendChild(summaryProducts);
+        const summaryTotal = document.createElement('div');
+        summaryTotal.classList.add('summary__total');
+        summaryTotal.innerText = ` Total:`;
+        summary.appendChild(summaryTotal);
+        const summaryPromo = document.createElement('div');
+        summaryPromo.classList.add('summary__promo');
+        summaryPromo.innerText = ` Promo:`;
+        summary.appendChild(summaryPromo);
+        const summaryButton = document.createElement('a');
+        summaryButton.classList.add('summary__button');
+        summaryButton.innerText = ` BUY NOW`;
+        summaryButton.href = '/#/buy';
+        summary.appendChild(summaryButton);
+    }
+}
+exports["default"] = ProductInCartsView;
 
 
 /***/ }),

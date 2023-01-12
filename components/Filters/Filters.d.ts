@@ -1,0 +1,31 @@
+import { ProductModel } from '../models/product';
+import { Filter } from '../../utils/filter';
+import ProductsList from '../ProductsList/ProductsList';
+import './Filters.scss';
+export default class Filters {
+    categories: string[];
+    brands: string[];
+    prices: number[];
+    quantities: number[];
+    state: Filter;
+    productsList: ProductsList;
+    productsForFilter: ProductModel[];
+    constructor(productsList: ProductsList);
+    render(): void;
+    resetFilter(): void;
+    resetFilters(): void;
+    sortFilters(): void;
+    setSortFilter(select: HTMLSelectElement): void;
+    searchFilter(): void;
+    debounce<T extends (...params: Event[]) => void>(fn: T, ms: number): (this: Event, ...args: Event[]) => void;
+    setSearchFilter(e: Event): void;
+    checkboxFilters(): void;
+    setCategoryFilter(e: Event): void;
+    setBrandFilter(e: Event): void;
+    setAmountInCheckbox(): void;
+    getProductsForFilter(state: Filter): void;
+    setAmountProducts(): void;
+    rangeFilters(prop: number[], state: [number, number] | []): void;
+    setFilterRange(start: number, end: number, values: [number, number], selector: string): void;
+    setStatePrice(): void;
+}
